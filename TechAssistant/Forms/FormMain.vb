@@ -19,6 +19,7 @@ Public Class FormMain
         Me.Width = ApplicationState.Options.WindowWidth
         Me.Height = ApplicationState.Options.WindowHeight
         Me.WindowState = ApplicationState.Options.WindowState
+        Me.Text = ApplicationState.Options.WindowTitle
 
     End Sub
     Private Sub FormMain_FormClosing(
