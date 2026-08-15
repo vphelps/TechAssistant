@@ -1,5 +1,6 @@
 ﻿Public Class AppOptions
 
+    Public Property WindowTitle As String = "TechAssistant"
     Public Property RememberWindowSize As Boolean = True
 
     Public Property WindowLeft As Integer
