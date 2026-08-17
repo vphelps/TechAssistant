@@ -3,7 +3,28 @@ Imports Microsoft.Data.SqlClient
 
 Public Class FormMain
 
+    Private Sub UpdateHelpText()
+
+        Dim tabName As String
+
+        Select Case tcFormMain.SelectedTab.Name
+            Case tpDbInfo.Name
+                tabName = tcDbInfo.SelectedTab.Name
+            Case tpDbAnalytics.Name
+                tabName = tcDbAnalytics.SelectedTab.Name
+            Case Else
+                tabName = tcFormMain.SelectedTab.Name
+        End Select
+
+        If _hints.ContainsKey(tabName) Then
+            SetHintText(_hints(tabName))
+        Else
+            rtbHints.Clear()
+        End If
+
+    End Sub
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim strTemp As String = Nothing
 
         GridContextMenuHelper.Attach(dgvSystemInfo)
         GridContextMenuHelper.Attach(dgvApplicationInfo)
@@ -11,6 +32,9 @@ Public Class FormMain
         GridContextMenuHelper.Attach(dgvWebOptions)
         GridContextMenuHelper.Attach(dgvTableSizes)
         GridContextMenuHelper.Attach(dgvGrowthByDay)
+
+        InitializeHints()
+        UpdateHelpText()
 
         ApplicationState.Options = OptionsManager.Load()
         Me.StartPosition = FormStartPosition.Manual
@@ -20,6 +44,18 @@ Public Class FormMain
         Me.Height = ApplicationState.Options.WindowHeight
         Me.WindowState = ApplicationState.Options.WindowState
         Me.Text = ApplicationState.Options.WindowTitle
+
+        tbWindowTitle.Text = ApplicationState.Options.WindowTitle
+
+        tbTest1.Text = System.IO.Path.GetDirectoryName(SystemInfo.GetAdvantageDllPath)
+
+
+
+        Dim fileTemp As String = System.IO.Path.GetDirectoryName(SystemInfo.GetAdvantageDllPath)
+        fileTemp = System.IO.Path.Combine(fileTemp, "AdvManager.exe")
+        Using icon As Icon = System.Drawing.Icon.ExtractAssociatedIcon(fileTemp)
+            btnIconTest.Image = icon.ToBitmap()
+        End Using
 
     End Sub
     Private Sub FormMain_FormClosing(
@@ -224,13 +260,27 @@ Public Class FormMain
     End Sub
 
     Private Sub btnTest4_Click(sender As Object, e As EventArgs) Handles btnTest4.Click
+        Dim fileTemp As String = System.IO.Path.GetDirectoryName(SystemInfo.GetAdvantageDllPath)
+        fileTemp = System.IO.Path.Combine(fileTemp, "AdvUpgrade.exe")
+        MessageHelper.ShowInfo(
+        fileTemp)
 
-        ApplicationState.Options.LastDatabaseServer =
-    "MYSERVER"
+        Dim startinfo As ProcessStartInfo = New ProcessStartInfo(fileTemp)
+        startinfo.Arguments = ""
+        startinfo.FileName = fileTemp
 
-        OptionsManager.Save(
-            ApplicationState.Options)
+        Process.Start(startinfo)
+
+        'If cbAdvUpgradeNoBackup.Checked Then temp += AdvUpgradeConstants.NoBackup + " "
+        'If cbAdvUpgradeQuiet.Checked Then temp += AdvUpgradeConstants.Quiet + " "
+        'If cbAdvUpgradeNoSetup.Checked Then temp += AdvUpgradeConstants.NoSetup
+        'startinfo.Arguments = temp
+
     End Sub
 
+    Private Sub tcFormMain_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tcFormMain.SelectedIndexChanged, tcDbInfo.SelectedIndexChanged, tcDbAnalytics.SelectedIndexChanged
 
+        UpdateHelpText()
+
+    End Sub
 End Class

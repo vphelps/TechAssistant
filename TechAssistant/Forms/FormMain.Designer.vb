@@ -43,14 +43,22 @@ Partial Class FormMain
         tpDbTableSizes = New TabPage()
         dgvTableSizes = New DataGridView()
         tpSizeByDay = New TabPage()
+        dgvGrowthByDay = New DataGridView()
+        tpOptions = New TabPage()
+        gbTechAssistOptions = New GroupBox()
+        tbWindowTitle = New TextBox()
+        lblWindowTitle = New Label()
         tlpFormMain = New TableLayoutPanel()
-        flpFormButtonsTop = New FlowLayoutPanel()
         flpFormButtonsBottom = New FlowLayoutPanel()
         flpTest = New FlowLayoutPanel()
         btnTest2 = New Button()
         btnTest3 = New Button()
         btnTest4 = New Button()
-        dgvGrowthByDay = New DataGridView()
+        tbTest1 = New TextBox()
+        scFormMainTopRight = New SplitContainer()
+        flpFormButtonsTop = New FlowLayoutPanel()
+        btnIconTest = New Button()
+        rtbHints = New RichTextBox()
         tcFormMain.SuspendLayout()
         tpSystemInfo.SuspendLayout()
         CType(dgvSystemInfo, ComponentModel.ISupportInitialize).BeginInit()
@@ -67,11 +75,17 @@ Partial Class FormMain
         tpDbTableSizes.SuspendLayout()
         CType(dgvTableSizes, ComponentModel.ISupportInitialize).BeginInit()
         tpSizeByDay.SuspendLayout()
+        CType(dgvGrowthByDay, ComponentModel.ISupportInitialize).BeginInit()
+        tpOptions.SuspendLayout()
+        gbTechAssistOptions.SuspendLayout()
         tlpFormMain.SuspendLayout()
-        flpFormButtonsTop.SuspendLayout()
         flpFormButtonsBottom.SuspendLayout()
         flpTest.SuspendLayout()
-        CType(dgvGrowthByDay, ComponentModel.ISupportInitialize).BeginInit()
+        CType(scFormMainTopRight, ComponentModel.ISupportInitialize).BeginInit()
+        scFormMainTopRight.Panel1.SuspendLayout()
+        scFormMainTopRight.Panel2.SuspendLayout()
+        scFormMainTopRight.SuspendLayout()
+        flpFormButtonsTop.SuspendLayout()
         SuspendLayout()
         ' 
         ' btnTestConnection
@@ -103,7 +117,7 @@ Partial Class FormMain
         ' 
         ' btnTestUpdate
         ' 
-        btnTestUpdate.Location = New Point(131, 3)
+        btnTestUpdate.Location = New Point(3, 32)
         btnTestUpdate.Name = "btnTestUpdate"
         btnTestUpdate.Size = New Size(122, 23)
         btnTestUpdate.TabIndex = 4
@@ -112,7 +126,7 @@ Partial Class FormMain
         ' 
         ' btnTestConnect
         ' 
-        btnTestConnect.Location = New Point(3, 32)
+        btnTestConnect.Location = New Point(3, 61)
         btnTestConnect.Name = "btnTestConnect"
         btnTestConnect.Size = New Size(122, 23)
         btnTestConnect.TabIndex = 5
@@ -124,20 +138,22 @@ Partial Class FormMain
         tcFormMain.Controls.Add(tpSystemInfo)
         tcFormMain.Controls.Add(tpDbInfo)
         tcFormMain.Controls.Add(tpDbAnalytics)
+        tcFormMain.Controls.Add(tpOptions)
         tcFormMain.Dock = DockStyle.Fill
         tcFormMain.Location = New Point(3, 3)
         tcFormMain.Name = "tcFormMain"
         tcFormMain.SelectedIndex = 0
-        tcFormMain.Size = New Size(931, 624)
+        tcFormMain.Size = New Size(818, 552)
         tcFormMain.TabIndex = 6
         ' 
         ' tpSystemInfo
         ' 
+        tpSystemInfo.BackColor = SystemColors.ControlDark
         tpSystemInfo.Controls.Add(dgvSystemInfo)
         tpSystemInfo.Location = New Point(4, 24)
         tpSystemInfo.Name = "tpSystemInfo"
         tpSystemInfo.Padding = New Padding(3)
-        tpSystemInfo.Size = New Size(923, 596)
+        tpSystemInfo.Size = New Size(810, 524)
         tpSystemInfo.TabIndex = 0
         tpSystemInfo.Text = "System Info"
         ' 
@@ -154,7 +170,7 @@ Partial Class FormMain
         dgvSystemInfo.ReadOnly = True
         dgvSystemInfo.RowHeadersVisible = False
         dgvSystemInfo.SelectionMode = DataGridViewSelectionMode.CellSelect
-        dgvSystemInfo.Size = New Size(917, 590)
+        dgvSystemInfo.Size = New Size(804, 518)
         dgvSystemInfo.TabIndex = 2
         ' 
         ' tpDbInfo
@@ -163,7 +179,7 @@ Partial Class FormMain
         tpDbInfo.Location = New Point(4, 24)
         tpDbInfo.Name = "tpDbInfo"
         tpDbInfo.Padding = New Padding(3)
-        tpDbInfo.Size = New Size(923, 596)
+        tpDbInfo.Size = New Size(810, 524)
         tpDbInfo.TabIndex = 1
         tpDbInfo.Text = "CE Db Info"
         ' 
@@ -177,16 +193,17 @@ Partial Class FormMain
         tcDbInfo.Multiline = True
         tcDbInfo.Name = "tcDbInfo"
         tcDbInfo.SelectedIndex = 0
-        tcDbInfo.Size = New Size(917, 590)
+        tcDbInfo.Size = New Size(804, 518)
         tcDbInfo.TabIndex = 1
         ' 
         ' tpApplicationInfo
         ' 
+        tpApplicationInfo.BackColor = SystemColors.ControlDark
         tpApplicationInfo.Controls.Add(dgvApplicationInfo)
         tpApplicationInfo.Location = New Point(4, 24)
         tpApplicationInfo.Name = "tpApplicationInfo"
         tpApplicationInfo.Padding = New Padding(3)
-        tpApplicationInfo.Size = New Size(909, 562)
+        tpApplicationInfo.Size = New Size(796, 490)
         tpApplicationInfo.TabIndex = 0
         tpApplicationInfo.Text = "ApplicationInfo"
         ' 
@@ -203,7 +220,7 @@ Partial Class FormMain
         dgvApplicationInfo.ReadOnly = True
         dgvApplicationInfo.RowHeadersVisible = False
         dgvApplicationInfo.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        dgvApplicationInfo.Size = New Size(903, 556)
+        dgvApplicationInfo.Size = New Size(790, 484)
         dgvApplicationInfo.TabIndex = 0
         ' 
         ' tpAppOptions
@@ -212,7 +229,7 @@ Partial Class FormMain
         tpAppOptions.Location = New Point(4, 24)
         tpAppOptions.Name = "tpAppOptions"
         tpAppOptions.Padding = New Padding(3)
-        tpAppOptions.Size = New Size(909, 562)
+        tpAppOptions.Size = New Size(796, 490)
         tpAppOptions.TabIndex = 1
         tpAppOptions.Text = "AppOptions"
         ' 
@@ -228,7 +245,7 @@ Partial Class FormMain
         dgvAppOptions.Name = "dgvAppOptions"
         dgvAppOptions.ReadOnly = True
         dgvAppOptions.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        dgvAppOptions.Size = New Size(903, 556)
+        dgvAppOptions.Size = New Size(790, 484)
         dgvAppOptions.TabIndex = 0
         ' 
         ' tpWebOptions
@@ -237,7 +254,7 @@ Partial Class FormMain
         tpWebOptions.Location = New Point(4, 24)
         tpWebOptions.Name = "tpWebOptions"
         tpWebOptions.Padding = New Padding(3)
-        tpWebOptions.Size = New Size(909, 562)
+        tpWebOptions.Size = New Size(796, 490)
         tpWebOptions.TabIndex = 2
         tpWebOptions.Text = "WebOptions"
         ' 
@@ -253,16 +270,17 @@ Partial Class FormMain
         dgvWebOptions.Name = "dgvWebOptions"
         dgvWebOptions.ReadOnly = True
         dgvWebOptions.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        dgvWebOptions.Size = New Size(903, 556)
+        dgvWebOptions.Size = New Size(790, 484)
         dgvWebOptions.TabIndex = 1
         ' 
         ' tpDbAnalytics
         ' 
+        tpDbAnalytics.BackColor = SystemColors.ControlDark
         tpDbAnalytics.Controls.Add(tcDbAnalytics)
         tpDbAnalytics.Location = New Point(4, 24)
         tpDbAnalytics.Name = "tpDbAnalytics"
         tpDbAnalytics.Padding = New Padding(3)
-        tpDbAnalytics.Size = New Size(923, 596)
+        tpDbAnalytics.Size = New Size(810, 524)
         tpDbAnalytics.TabIndex = 2
         tpDbAnalytics.Text = "Database Analytics"
         ' 
@@ -274,7 +292,7 @@ Partial Class FormMain
         tcDbAnalytics.Location = New Point(3, 3)
         tcDbAnalytics.Name = "tcDbAnalytics"
         tcDbAnalytics.SelectedIndex = 0
-        tcDbAnalytics.Size = New Size(917, 590)
+        tcDbAnalytics.Size = New Size(804, 518)
         tcDbAnalytics.TabIndex = 0
         ' 
         ' tpDbTableSizes
@@ -283,7 +301,7 @@ Partial Class FormMain
         tpDbTableSizes.Location = New Point(4, 24)
         tpDbTableSizes.Name = "tpDbTableSizes"
         tpDbTableSizes.Padding = New Padding(3)
-        tpDbTableSizes.Size = New Size(909, 562)
+        tpDbTableSizes.Size = New Size(796, 490)
         tpDbTableSizes.TabIndex = 1
         tpDbTableSizes.Text = "Tables Sizes"
         tpDbTableSizes.UseVisualStyleBackColor = True
@@ -294,7 +312,7 @@ Partial Class FormMain
         dgvTableSizes.Dock = DockStyle.Fill
         dgvTableSizes.Location = New Point(3, 3)
         dgvTableSizes.Name = "dgvTableSizes"
-        dgvTableSizes.Size = New Size(903, 556)
+        dgvTableSizes.Size = New Size(790, 484)
         dgvTableSizes.TabIndex = 0
         ' 
         ' tpSizeByDay
@@ -303,10 +321,58 @@ Partial Class FormMain
         tpSizeByDay.Location = New Point(4, 24)
         tpSizeByDay.Name = "tpSizeByDay"
         tpSizeByDay.Padding = New Padding(3)
-        tpSizeByDay.Size = New Size(909, 562)
+        tpSizeByDay.Size = New Size(796, 490)
         tpSizeByDay.TabIndex = 0
         tpSizeByDay.Text = "Growth by Day"
         tpSizeByDay.UseVisualStyleBackColor = True
+        ' 
+        ' dgvGrowthByDay
+        ' 
+        dgvGrowthByDay.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgvGrowthByDay.Dock = DockStyle.Fill
+        dgvGrowthByDay.Location = New Point(3, 3)
+        dgvGrowthByDay.Name = "dgvGrowthByDay"
+        dgvGrowthByDay.Size = New Size(790, 484)
+        dgvGrowthByDay.TabIndex = 0
+        ' 
+        ' tpOptions
+        ' 
+        tpOptions.BackColor = SystemColors.ControlDark
+        tpOptions.Controls.Add(gbTechAssistOptions)
+        tpOptions.Location = New Point(4, 24)
+        tpOptions.Name = "tpOptions"
+        tpOptions.Size = New Size(810, 524)
+        tpOptions.TabIndex = 3
+        tpOptions.Text = "Options"
+        ' 
+        ' gbTechAssistOptions
+        ' 
+        gbTechAssistOptions.BackColor = SystemColors.Control
+        gbTechAssistOptions.Controls.Add(tbWindowTitle)
+        gbTechAssistOptions.Controls.Add(lblWindowTitle)
+        gbTechAssistOptions.Location = New Point(5, 8)
+        gbTechAssistOptions.Name = "gbTechAssistOptions"
+        gbTechAssistOptions.Size = New Size(723, 193)
+        gbTechAssistOptions.TabIndex = 0
+        gbTechAssistOptions.TabStop = False
+        gbTechAssistOptions.Text = "Tech Assistant Options"
+        ' 
+        ' tbWindowTitle
+        ' 
+        tbWindowTitle.Location = New Point(116, 21)
+        tbWindowTitle.Name = "tbWindowTitle"
+        tbWindowTitle.Size = New Size(273, 23)
+        tbWindowTitle.TabIndex = 1
+        tbWindowTitle.Text = "tbWindowTitle"
+        ' 
+        ' lblWindowTitle
+        ' 
+        lblWindowTitle.AutoSize = True
+        lblWindowTitle.Location = New Point(23, 24)
+        lblWindowTitle.Name = "lblWindowTitle"
+        lblWindowTitle.Size = New Size(86, 15)
+        lblWindowTitle.TabIndex = 0
+        lblWindowTitle.Text = "Window Title:  "
         ' 
         ' tlpFormMain
         ' 
@@ -314,36 +380,25 @@ Partial Class FormMain
         tlpFormMain.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 76.0623245F))
         tlpFormMain.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 23.9376774F))
         tlpFormMain.Controls.Add(tcFormMain, 0, 0)
-        tlpFormMain.Controls.Add(flpFormButtonsTop, 1, 0)
         tlpFormMain.Controls.Add(flpFormButtonsBottom, 1, 1)
         tlpFormMain.Controls.Add(flpTest, 0, 1)
+        tlpFormMain.Controls.Add(scFormMainTopRight, 1, 0)
         tlpFormMain.Dock = DockStyle.Fill
         tlpFormMain.Location = New Point(0, 0)
         tlpFormMain.Name = "tlpFormMain"
         tlpFormMain.RowCount = 2
         tlpFormMain.RowStyles.Add(New RowStyle(SizeType.Percent, 84.42822F))
         tlpFormMain.RowStyles.Add(New RowStyle(SizeType.Percent, 15.5717764F))
-        tlpFormMain.Size = New Size(1232, 747)
+        tlpFormMain.Size = New Size(1084, 661)
         tlpFormMain.TabIndex = 7
-        ' 
-        ' flpFormButtonsTop
-        ' 
-        flpFormButtonsTop.Controls.Add(btnTestConnection)
-        flpFormButtonsTop.Controls.Add(btnTestUpdate)
-        flpFormButtonsTop.Controls.Add(btnTestConnect)
-        flpFormButtonsTop.Dock = DockStyle.Top
-        flpFormButtonsTop.Location = New Point(940, 3)
-        flpFormButtonsTop.Name = "flpFormButtonsTop"
-        flpFormButtonsTop.Size = New Size(289, 319)
-        flpFormButtonsTop.TabIndex = 7
         ' 
         ' flpFormButtonsBottom
         ' 
         flpFormButtonsBottom.Controls.Add(btnCancel)
         flpFormButtonsBottom.Dock = DockStyle.Bottom
-        flpFormButtonsBottom.Location = New Point(940, 644)
+        flpFormButtonsBottom.Location = New Point(827, 561)
         flpFormButtonsBottom.Name = "flpFormButtonsBottom"
-        flpFormButtonsBottom.Size = New Size(289, 100)
+        flpFormButtonsBottom.Size = New Size(254, 97)
         flpFormButtonsBottom.TabIndex = 8
         ' 
         ' flpTest
@@ -352,9 +407,10 @@ Partial Class FormMain
         flpTest.Controls.Add(btnTest2)
         flpTest.Controls.Add(btnTest3)
         flpTest.Controls.Add(btnTest4)
-        flpTest.Location = New Point(3, 633)
+        flpTest.Controls.Add(tbTest1)
+        flpTest.Location = New Point(3, 561)
         flpTest.Name = "flpTest"
-        flpTest.Size = New Size(574, 100)
+        flpTest.Size = New Size(574, 97)
         flpTest.TabIndex = 9
         ' 
         ' btnTest2
@@ -384,20 +440,71 @@ Partial Class FormMain
         btnTest4.Text = "Test4"
         btnTest4.UseVisualStyleBackColor = True
         ' 
-        ' dgvGrowthByDay
+        ' tbTest1
         ' 
-        dgvGrowthByDay.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvGrowthByDay.Dock = DockStyle.Fill
-        dgvGrowthByDay.Location = New Point(3, 3)
-        dgvGrowthByDay.Name = "dgvGrowthByDay"
-        dgvGrowthByDay.Size = New Size(903, 556)
-        dgvGrowthByDay.TabIndex = 0
+        tbTest1.Location = New Point(3, 32)
+        tbTest1.Name = "tbTest1"
+        tbTest1.Size = New Size(311, 23)
+        tbTest1.TabIndex = 7
+        tbTest1.Text = "tbTest1"
+        ' 
+        ' scFormMainTopRight
+        ' 
+        scFormMainTopRight.Dock = DockStyle.Fill
+        scFormMainTopRight.Location = New Point(827, 3)
+        scFormMainTopRight.Name = "scFormMainTopRight"
+        scFormMainTopRight.Orientation = Orientation.Horizontal
+        ' 
+        ' scFormMainTopRight.Panel1
+        ' 
+        scFormMainTopRight.Panel1.Controls.Add(flpFormButtonsTop)
+        ' 
+        ' scFormMainTopRight.Panel2
+        ' 
+        scFormMainTopRight.Panel2.Controls.Add(rtbHints)
+        scFormMainTopRight.Size = New Size(254, 552)
+        scFormMainTopRight.SplitterDistance = 213
+        scFormMainTopRight.TabIndex = 10
+        ' 
+        ' flpFormButtonsTop
+        ' 
+        flpFormButtonsTop.Controls.Add(btnTestConnection)
+        flpFormButtonsTop.Controls.Add(btnTestUpdate)
+        flpFormButtonsTop.Controls.Add(btnTestConnect)
+        flpFormButtonsTop.Controls.Add(btnIconTest)
+        flpFormButtonsTop.Dock = DockStyle.Fill
+        flpFormButtonsTop.Location = New Point(0, 0)
+        flpFormButtonsTop.Name = "flpFormButtonsTop"
+        flpFormButtonsTop.Size = New Size(254, 213)
+        flpFormButtonsTop.TabIndex = 7
+        ' 
+        ' btnIconTest
+        ' 
+        btnIconTest.Location = New Point(131, 61)
+        btnIconTest.Name = "btnIconTest"
+        btnIconTest.Size = New Size(48, 48)
+        btnIconTest.TabIndex = 6
+        btnIconTest.UseVisualStyleBackColor = True
+        ' 
+        ' rtbHints
+        ' 
+        rtbHints.BackColor = SystemColors.Info
+        rtbHints.BorderStyle = BorderStyle.FixedSingle
+        rtbHints.Dock = DockStyle.Fill
+        rtbHints.ForeColor = SystemColors.InfoText
+        rtbHints.Location = New Point(0, 0)
+        rtbHints.Name = "rtbHints"
+        rtbHints.ReadOnly = True
+        rtbHints.ScrollBars = RichTextBoxScrollBars.Vertical
+        rtbHints.Size = New Size(254, 335)
+        rtbHints.TabIndex = 0
+        rtbHints.Text = ""
         ' 
         ' FormMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1232, 747)
+        ClientSize = New Size(1084, 661)
         Controls.Add(tlpFormMain)
         ForeColor = SystemColors.ControlText
         Name = "FormMain"
@@ -418,11 +525,19 @@ Partial Class FormMain
         tpDbTableSizes.ResumeLayout(False)
         CType(dgvTableSizes, ComponentModel.ISupportInitialize).EndInit()
         tpSizeByDay.ResumeLayout(False)
+        CType(dgvGrowthByDay, ComponentModel.ISupportInitialize).EndInit()
+        tpOptions.ResumeLayout(False)
+        gbTechAssistOptions.ResumeLayout(False)
+        gbTechAssistOptions.PerformLayout()
         tlpFormMain.ResumeLayout(False)
-        flpFormButtonsTop.ResumeLayout(False)
         flpFormButtonsBottom.ResumeLayout(False)
         flpTest.ResumeLayout(False)
-        CType(dgvGrowthByDay, ComponentModel.ISupportInitialize).EndInit()
+        flpTest.PerformLayout()
+        scFormMainTopRight.Panel1.ResumeLayout(False)
+        scFormMainTopRight.Panel2.ResumeLayout(False)
+        CType(scFormMainTopRight, ComponentModel.ISupportInitialize).EndInit()
+        scFormMainTopRight.ResumeLayout(False)
+        flpFormButtonsTop.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -455,5 +570,13 @@ Partial Class FormMain
     Friend WithEvents tpDbTableSizes As TabPage
     Friend WithEvents dgvTableSizes As DataGridView
     Friend WithEvents dgvGrowthByDay As DataGridView
+    Friend WithEvents tpOptions As TabPage
+    Friend WithEvents gbTechAssistOptions As GroupBox
+    Friend WithEvents tbWindowTitle As TextBox
+    Friend WithEvents lblWindowTitle As Label
+    Friend WithEvents scFormMainTopRight As SplitContainer
+    Friend WithEvents rtbHints As RichTextBox
+    Friend WithEvents tbTest1 As TextBox
+    Friend WithEvents btnIconTest As Button
 
 End Class

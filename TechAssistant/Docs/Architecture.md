@@ -2,9 +2,9 @@
 
 ## Application Overview
 
-TechAssistant is a WinForms application focused on diagnosing and analyzing CenterEdge / Advantage environments.
+TechAssistant is a WinForms application focused on diagnostics, configuration review, and database analytics for CenterEdge / Advantage environments.
 
-The application is separated into:
+The application is organized into:
 
 - Forms
 - Models
@@ -19,19 +19,28 @@ The application is separated into:
 
 Main application window.
 
-Contains:
-
 ### System Info
 
-Displays workstation and environment information.
+Displays workstation and environment diagnostics.
 
 ### CE Db Info
 
-Displays database configuration information.
+Displays CenterEdge configuration data.
+
+Child tabs:
+
+- Application Information
+- Application Options
+- Web Options
 
 ### Database Analytics
 
-Reserved for database reporting and statistics features.
+Displays historical and analytical database information.
+
+Child tabs:
+
+- Database Table Sizes
+- Database Growth by Day
 
 ---
 
@@ -39,21 +48,40 @@ Reserved for database reporting and statistics features.
 
 ## AppOptions
 
-Stores user preferences.
+Stores persisted user preferences.
 
-Examples:
+Current settings:
 
-- Window Size
-- Window Position
-- Export Preferences
+### Application
+
+- WindowTitle
+
+### Main Window
+
+- RememberWindowSize
+- WindowLeft
+- WindowTop
+- WindowWidth
+- WindowHeight
+- WindowState
+
+### Database
+
+- LastDatabaseServer
+
+### Export
+
+- PreferredExportFormat
+
+---
 
 ## ApplicationState
 
-Stores application-wide runtime state.
+Provides application-wide runtime state.
 
-Examples:
+Current usage:
 
-- Loaded AppOptions
+- Loaded application options
 
 ---
 
@@ -83,15 +111,15 @@ Provides DataGridView context menu functionality.
 
 ### Export Behavior
 
-- Skips section header rows
-- Supports tab-delimited export
-- Supports CSV export
+- Excludes section headers
+- Supports CSV formatting
+- Supports spreadsheet-compatible formatting
 
 ---
 
 ## MessageHelper
 
-Standardized application messages.
+Provides standardized application messages.
 
 ### Message Types
 
@@ -104,11 +132,32 @@ Standardized application messages.
 
 ## OptionsManager
 
-Loads and saves application settings.
+Loads and saves user settings.
 
-Storage:
+Storage location:
 
+```text
 %APPDATA%\TechAssistant\options.json
+```
+
+Uses:
+
+- JSON serialization
+- Automatic option creation
+- Automatic option loading
+
+---
+
+# Form Partials
+
+## FormMain.Hints.vb
+
+Responsible for:
+
+- Hint initialization
+- Context-sensitive help
+- Quick Tips display
+- RichTextBox formatting
 
 ---
 
@@ -116,26 +165,26 @@ Storage:
 
 ## DatabaseService
 
-Handles SQL Server interaction.
+Provides SQL Server interaction.
 
-### Functions
+Typical operations:
 
 - ExecuteScalar()
 - ExecuteNonQuery()
-- GetDataTable()
-- TestConnection()
+- Retrieve DataTables
+- Test database connectivity
 
 ---
 
 ## SystemInfo
 
-Builds system information datasets.
+Builds system-information datasets.
 
-Information includes:
+Information categories include:
 
 - Computer
-- Hardware
 - Operating System
+- Hardware
 - Network
 - Database
 - Advantage
@@ -146,7 +195,7 @@ Information includes:
 
 ## Resources.resx
 
-Embedded application resources.
+Embedded resources used throughout the application.
 
 Examples:
 

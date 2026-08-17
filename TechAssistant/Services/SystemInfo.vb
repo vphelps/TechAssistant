@@ -278,7 +278,7 @@ Public NotInheritable Class SystemInfo
         Return AdvantageInfo.AppInstallState.NotInstalled
 
     End Function
-    Private Shared Function GetAdvantageDllPath() As String
+    Public Shared Function GetAdvantageDllPath() As String
 
         Dim x64Dll As String = Path.Combine(AppPaths.CEPath64, "AdvCommon.dll")
         Dim x86Dll As String = Path.Combine(AppPaths.CEPath86, "AdvCommon.dll")

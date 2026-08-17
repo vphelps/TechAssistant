@@ -1,120 +1,38 @@
-﻿# Roadmap
+﻿# Completed
 
-## Currently In Progress
+## User Settings
 
-### User Options
+- JSON-based settings storage
+- OptionsManager implementation
+- ApplicationState implementation
+- Window size persistence
+- Window position persistence
 
-- Save window size
-- Save window position
-- JSON configuration file
+## Grid Export
 
-### Database Analytics
+- Copy Cell
+- Copy Row for Excel
+- Copy Row as CSV
+- Copy All for Excel
+- Copy All as CSV
 
-Initial planning and design
+## Context Help
 
----
-
-# Planned Features
+- Quick Tips panel
+- Context-sensitive hints
+- RichTextBox formatting
 
 ## Database Analytics
 
-### Database Size
-
-Show:
-
-- Database Name
-- Current Size
-- Data File Size
-- Log File Size
-
-### Table Size
-
-Show:
-
-- Table Name
-- Row Count
-- Table Size
-
-### Database Growth
-
-Show:
-
-- Daily Growth
-- Weekly Growth
-- Historical Trends
-
-### Database Activity
-
-Show:
-
-- Sessions
-- Connections
-- Recent Activity
+- Database Table Sizes
+- Database Growth by Day
 
 ---
 
-## Services
+# In Progress
 
-### Service Status
+## Database Analytics
 
-Show:
+Additional statistics and reporting
 
-- Service Name
-- Running Status
-- Startup Type
-
-### Service Health
-
-Show:
-
-- Expected Services
-- Missing Services
-- Service Validation
-
----
-
-## Configuration
-
-### User Settings
-
-- Default Export Format
-- Auto Refresh
-- Window Layout
-
-### Environment Settings
-
-- Server Preferences
-- Connection Preferences
-
----
-
-## Reporting
-
-### Export
-
-- CSV Files
-- Report Generation
-
-### Printing
-
-- Printable Reports
-
----
-
-# Future Ideas
-
-## Database Utilities
-
-- Query Runner
-- Index Information
-- Database Comparison
-
-## Environment Validation
-
-- Verify Required Files
-- Verify Services
-- Verify Database Connectivity
-
-## Dashboard
-
-High-level environment health summary.
+...

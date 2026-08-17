@@ -6,29 +6,49 @@ TechAssistant is a Windows utility application for gathering diagnostics, config
 
 ### System Info
 
-Displays:
+Displays workstation and environment information including:
 
-- Computer Name
-- User Name
-- Domain
-- Operating System
-- Architecture
-- Memory Information
-- Network Information
-- Database Information
-- Advantage Information
+- Computer information
+- Operating system information
+- Network information
+- Advantage information
+- Database information
 
 ### CE Db Info
 
-Displays information from the CenterEdge database:
+Displays configuration data from the CenterEdge database.
 
-- ApplicationInfo
-- AppOptions
-- WebOptions
+#### Application Information
+
+Displays configuration values from the ApplicationInfo table.
+
+#### Application Options
+
+Displays application settings from AppOptions.
+
+#### Web Options
+
+Displays website and portal configuration settings.
+
+### Database Analytics
+
+Provides visibility into database growth and storage utilization.
+
+#### Database Table Sizes
+
+Displays:
+
+- Table name
+- Row counts
+- Table size information
+
+#### Database Growth by Day
+
+Displays database size information collected over time to help identify growth patterns.
 
 ### Grid Export
 
-DataGridView context menu functionality:
+All DataGridViews support:
 
 - Copy Cell
 - Copy Row for Excel / Google Sheets
@@ -36,56 +56,63 @@ DataGridView context menu functionality:
 - Copy All for Excel / Google Sheets
 - Copy All as CSV
 
+Export functions exclude section header rows.
+
 ### User Settings
 
-Settings are stored in:
+User preferences are stored as JSON in:
 
-- JSON format
-- %APPDATA%\TechAssistant\options.json
+```text
+%APPDATA%\TechAssistant\options.json
+```
 
-Current settings:
+Current settings include:
 
-- Window Size
-- Window Position
+- Window title
+- Window position
+- Window size
+- Window state
+- Preferred export format
+- Last database server
+
+### Context Sensitive Hints
+
+Each tab provides usage guidance and tips through the Quick Tips panel.
 
 ## Technologies
 
 - VB.NET
 - WinForms
 - SQL Server
-- .NET
+- .NET 10
 
 ## Project Goals
 
 Provide a lightweight utility for:
 
 - Environment diagnostics
-- Database information
+- Database configuration review
 - Database analytics
-- Configuration review
 - Operational troubleshooting
+- Administrative support
 
 ## Future Features
 
 ### Database Analytics
 
-- Database Size
-- Table Size
-- Database Growth
-- Database Activity
+- Database size
+- Database activity
+- Index statistics
+- Connection statistics
 
 ### Services
 
-- Service Status
-- Service Health
-- Service Restart
+- Service status
+- Service validation
+- Service restart operations
 
-### Export
+### Reporting
 
-- Export CSV Files
-- Export Reports
-
-### Configuration
-
-- Additional User Settings
-- Saved Preferences
+- CSV export
+- Report generation
+- Dashboard views
