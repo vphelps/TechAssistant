@@ -22,6 +22,7 @@ Partial Class FormMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         btnTestConnection = New Button()
         btnCancel = New Button()
         btnTest1 = New Button()
@@ -55,10 +56,25 @@ Partial Class FormMain
         btnTest3 = New Button()
         btnTest4 = New Button()
         tbTest1 = New TextBox()
+        Panel1 = New Panel()
+        btnAdvManager = New Button()
+        btnAdvReportEditor = New Button()
+        btnAdvKiosk = New Button()
+        btnKioskSetup = New Button()
+        btnAdvRedeem = New Button()
+        btnAdvGroups = New Button()
+        btnPos = New Button()
+        FlowLayoutPanel1 = New FlowLayoutPanel()
+        btnTaskManager = New Button()
+        btnCalculator = New Button()
+        btnServices = New Button()
+        btnEventViewer = New Button()
         scFormMainTopRight = New SplitContainer()
         flpFormButtonsTop = New FlowLayoutPanel()
         btnIconTest = New Button()
         rtbHints = New RichTextBox()
+        ttAdvantageButtons = New ToolTip(components)
+        ttUtilityButtons = New ToolTip(components)
         tcFormMain.SuspendLayout()
         tpSystemInfo.SuspendLayout()
         CType(dgvSystemInfo, ComponentModel.ISupportInitialize).BeginInit()
@@ -81,6 +97,8 @@ Partial Class FormMain
         tlpFormMain.SuspendLayout()
         flpFormButtonsBottom.SuspendLayout()
         flpTest.SuspendLayout()
+        Panel1.SuspendLayout()
+        FlowLayoutPanel1.SuspendLayout()
         CType(scFormMainTopRight, ComponentModel.ISupportInitialize).BeginInit()
         scFormMainTopRight.Panel1.SuspendLayout()
         scFormMainTopRight.Panel2.SuspendLayout()
@@ -408,9 +426,11 @@ Partial Class FormMain
         flpTest.Controls.Add(btnTest3)
         flpTest.Controls.Add(btnTest4)
         flpTest.Controls.Add(tbTest1)
+        flpTest.Controls.Add(Panel1)
+        flpTest.Controls.Add(FlowLayoutPanel1)
         flpTest.Location = New Point(3, 561)
         flpTest.Name = "flpTest"
-        flpTest.Size = New Size(574, 97)
+        flpTest.Size = New Size(811, 97)
         flpTest.TabIndex = 9
         ' 
         ' btnTest2
@@ -442,11 +462,124 @@ Partial Class FormMain
         ' 
         ' tbTest1
         ' 
-        tbTest1.Location = New Point(3, 32)
+        tbTest1.Location = New Point(327, 3)
         tbTest1.Name = "tbTest1"
-        tbTest1.Size = New Size(311, 23)
+        tbTest1.Size = New Size(469, 23)
         tbTest1.TabIndex = 7
         tbTest1.Text = "tbTest1"
+        ' 
+        ' Panel1
+        ' 
+        Panel1.Controls.Add(btnAdvManager)
+        Panel1.Controls.Add(btnAdvReportEditor)
+        Panel1.Controls.Add(btnAdvKiosk)
+        Panel1.Controls.Add(btnKioskSetup)
+        Panel1.Controls.Add(btnAdvRedeem)
+        Panel1.Controls.Add(btnAdvGroups)
+        Panel1.Controls.Add(btnPos)
+        Panel1.Location = New Point(3, 32)
+        Panel1.Name = "Panel1"
+        Panel1.Size = New Size(337, 56)
+        Panel1.TabIndex = 14
+        ' 
+        ' btnAdvManager
+        ' 
+        btnAdvManager.Location = New Point(3, 3)
+        btnAdvManager.Name = "btnAdvManager"
+        btnAdvManager.Size = New Size(42, 42)
+        btnAdvManager.TabIndex = 8
+        btnAdvManager.UseVisualStyleBackColor = True
+        ' 
+        ' btnAdvReportEditor
+        ' 
+        btnAdvReportEditor.Location = New Point(291, 3)
+        btnAdvReportEditor.Name = "btnAdvReportEditor"
+        btnAdvReportEditor.Size = New Size(42, 42)
+        btnAdvReportEditor.TabIndex = 13
+        btnAdvReportEditor.UseVisualStyleBackColor = True
+        ' 
+        ' btnAdvKiosk
+        ' 
+        btnAdvKiosk.Location = New Point(243, 3)
+        btnAdvKiosk.Name = "btnAdvKiosk"
+        btnAdvKiosk.Size = New Size(42, 42)
+        btnAdvKiosk.TabIndex = 13
+        btnAdvKiosk.UseVisualStyleBackColor = True
+        ' 
+        ' btnKioskSetup
+        ' 
+        btnKioskSetup.Location = New Point(195, 3)
+        btnKioskSetup.Name = "btnKioskSetup"
+        btnKioskSetup.Size = New Size(42, 42)
+        btnKioskSetup.TabIndex = 12
+        btnKioskSetup.UseVisualStyleBackColor = True
+        ' 
+        ' btnAdvRedeem
+        ' 
+        btnAdvRedeem.Location = New Point(147, 3)
+        btnAdvRedeem.Name = "btnAdvRedeem"
+        btnAdvRedeem.Size = New Size(42, 42)
+        btnAdvRedeem.TabIndex = 11
+        btnAdvRedeem.UseVisualStyleBackColor = True
+        ' 
+        ' btnAdvGroups
+        ' 
+        btnAdvGroups.Location = New Point(99, 3)
+        btnAdvGroups.Name = "btnAdvGroups"
+        btnAdvGroups.Size = New Size(42, 42)
+        btnAdvGroups.TabIndex = 10
+        btnAdvGroups.UseVisualStyleBackColor = True
+        ' 
+        ' btnPos
+        ' 
+        btnPos.Location = New Point(51, 3)
+        btnPos.Name = "btnPos"
+        btnPos.Size = New Size(42, 42)
+        btnPos.TabIndex = 9
+        btnPos.UseVisualStyleBackColor = True
+        ' 
+        ' FlowLayoutPanel1
+        ' 
+        FlowLayoutPanel1.Controls.Add(btnTaskManager)
+        FlowLayoutPanel1.Controls.Add(btnCalculator)
+        FlowLayoutPanel1.Controls.Add(btnServices)
+        FlowLayoutPanel1.Controls.Add(btnEventViewer)
+        FlowLayoutPanel1.Location = New Point(346, 32)
+        FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        FlowLayoutPanel1.Size = New Size(376, 56)
+        FlowLayoutPanel1.TabIndex = 15
+        ' 
+        ' btnTaskManager
+        ' 
+        btnTaskManager.Location = New Point(3, 3)
+        btnTaskManager.Name = "btnTaskManager"
+        btnTaskManager.Size = New Size(42, 42)
+        btnTaskManager.TabIndex = 15
+        btnTaskManager.UseVisualStyleBackColor = True
+        ' 
+        ' btnCalculator
+        ' 
+        btnCalculator.Location = New Point(51, 3)
+        btnCalculator.Name = "btnCalculator"
+        btnCalculator.Size = New Size(42, 42)
+        btnCalculator.TabIndex = 14
+        btnCalculator.UseVisualStyleBackColor = True
+        ' 
+        ' btnServices
+        ' 
+        btnServices.Location = New Point(99, 3)
+        btnServices.Name = "btnServices"
+        btnServices.Size = New Size(42, 42)
+        btnServices.TabIndex = 16
+        btnServices.UseVisualStyleBackColor = True
+        ' 
+        ' btnEventViewer
+        ' 
+        btnEventViewer.Location = New Point(147, 3)
+        btnEventViewer.Name = "btnEventViewer"
+        btnEventViewer.Size = New Size(42, 42)
+        btnEventViewer.TabIndex = 17
+        btnEventViewer.UseVisualStyleBackColor = True
         ' 
         ' scFormMainTopRight
         ' 
@@ -482,7 +615,7 @@ Partial Class FormMain
         ' 
         btnIconTest.Location = New Point(131, 61)
         btnIconTest.Name = "btnIconTest"
-        btnIconTest.Size = New Size(48, 48)
+        btnIconTest.Size = New Size(42, 42)
         btnIconTest.TabIndex = 6
         btnIconTest.UseVisualStyleBackColor = True
         ' 
@@ -499,6 +632,18 @@ Partial Class FormMain
         rtbHints.Size = New Size(254, 335)
         rtbHints.TabIndex = 0
         rtbHints.Text = ""
+        ' 
+        ' ttAdvantageButtons
+        ' 
+        ttAdvantageButtons.IsBalloon = True
+        ttAdvantageButtons.ToolTipIcon = ToolTipIcon.Info
+        ttAdvantageButtons.ToolTipTitle = "CenterEdge Advantage"
+        ' 
+        ' ttUtilityButtons
+        ' 
+        ttUtilityButtons.IsBalloon = True
+        ttUtilityButtons.ToolTipIcon = ToolTipIcon.Info
+        ttUtilityButtons.ToolTipTitle = "Windows Utilities"
         ' 
         ' FormMain
         ' 
@@ -533,6 +678,8 @@ Partial Class FormMain
         flpFormButtonsBottom.ResumeLayout(False)
         flpTest.ResumeLayout(False)
         flpTest.PerformLayout()
+        Panel1.ResumeLayout(False)
+        FlowLayoutPanel1.ResumeLayout(False)
         scFormMainTopRight.Panel1.ResumeLayout(False)
         scFormMainTopRight.Panel2.ResumeLayout(False)
         CType(scFormMainTopRight, ComponentModel.ISupportInitialize).EndInit()
@@ -578,5 +725,20 @@ Partial Class FormMain
     Friend WithEvents rtbHints As RichTextBox
     Friend WithEvents tbTest1 As TextBox
     Friend WithEvents btnIconTest As Button
+    Friend WithEvents btnAdvManager As Button
+    Friend WithEvents btnPos As Button
+    Friend WithEvents btnAdvGroups As Button
+    Friend WithEvents ttAdvantageButtons As ToolTip
+    Friend WithEvents btnAdvRedeem As Button
+    Friend WithEvents btnKioskSetup As Button
+    Friend WithEvents btnAdvKiosk As Button
+    Friend WithEvents btnAdvReportEditor As Button
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents btnCalculator As Button
+    Friend WithEvents btnTaskManager As Button
+    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
+    Friend WithEvents btnServices As Button
+    Friend WithEvents btnEventViewer As Button
+    Friend WithEvents ttUtilityButtons As ToolTip
 
 End Class

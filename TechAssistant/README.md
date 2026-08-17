@@ -1,6 +1,6 @@
 ﻿# TechAssistant
 
-TechAssistant is a Windows utility application for gathering diagnostics, configuration information, and operational statistics from CenterEdge / Advantage environments.
+TechAssistant is a Windows utility application for diagnostics, configuration review, database analytics, and operational support for CenterEdge / Advantage environments.
 
 ## Current Features
 
@@ -16,35 +16,60 @@ Displays workstation and environment information including:
 
 ### CE Db Info
 
-Displays configuration data from the CenterEdge database.
+Displays configuration information from the CenterEdge database.
 
 #### Application Information
 
-Displays configuration values from the ApplicationInfo table.
+Displays values from ApplicationInfo.
 
 #### Application Options
 
-Displays application settings from AppOptions.
+Displays values from AppOptions.
 
 #### Web Options
 
-Displays website and portal configuration settings.
+Displays website and portal configuration information.
 
 ### Database Analytics
 
-Provides visibility into database growth and storage utilization.
+Provides database reporting and analytical information.
 
 #### Database Table Sizes
 
 Displays:
 
-- Table name
+- Table names
 - Row counts
 - Table size information
 
-#### Database Growth by Day
+#### Database Growth By Day
 
-Displays database size information collected over time to help identify growth patterns.
+Displays database growth statistics over time.
+
+### Utility Launchers
+
+#### Advantage Utilities
+
+Launch commonly used Advantage applications:
+
+- Advantage Manager
+- Point of Sale
+- Advantage Groups
+- Advantage Redemption
+- Advantage Kiosk
+- Kiosk Setup
+- Advantage Report Editor
+
+#### Windows Utilities
+
+Launch commonly used Windows administration tools:
+
+- Calculator
+- Task Manager
+- Services
+- Event Viewer
+
+Icons are automatically extracted from the associated executable when available.
 
 ### Grid Export
 
@@ -56,11 +81,18 @@ All DataGridViews support:
 - Copy All for Excel / Google Sheets
 - Copy All as CSV
 
-Export functions exclude section header rows.
+### Context-Sensitive Help
+
+Each tab provides Quick Tips using the integrated help panel.
+
+Help text automatically updates based on:
+
+- Selected top-level tab
+- Selected child tab
 
 ### User Settings
 
-User preferences are stored as JSON in:
+Settings are stored in:
 
 ```text
 %APPDATA%\TechAssistant\options.json
@@ -68,16 +100,12 @@ User preferences are stored as JSON in:
 
 Current settings include:
 
-- Window title
-- Window position
-- Window size
-- Window state
-- Preferred export format
-- Last database server
-
-### Context Sensitive Hints
-
-Each tab provides usage guidance and tips through the Quick Tips panel.
+- Window Title
+- Window Position
+- Window Size
+- Window State
+- Last Database Server
+- Preferred Export Format
 
 ## Technologies
 
@@ -96,23 +124,30 @@ Provide a lightweight utility for:
 - Operational troubleshooting
 - Administrative support
 
-## Future Features
+## Planned Features
 
 ### Database Analytics
 
-- Database size
-- Database activity
-- Index statistics
-- Connection statistics
+- Database Size
+- Database Activity
+- Index Statistics
+- Connection Statistics
 
-### Services
+### Windows Tools
 
-- Service status
-- Service validation
-- Service restart operations
+- Device Manager
+- Computer Management
+- Registry Editor
+- PowerShell
 
 ### Reporting
 
-- CSV export
-- Report generation
-- Dashboard views
+- CSV Export
+- Report Generation
+- Dashboard Views
+
+### Configuration
+
+- Additional User Preferences
+- Saved Layouts
+- Export Options

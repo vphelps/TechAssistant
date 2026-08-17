@@ -33,7 +33,9 @@ Public Class FormMain
         GridContextMenuHelper.Attach(dgvTableSizes)
         GridContextMenuHelper.Attach(dgvGrowthByDay)
 
+        InitializeIcons()
         InitializeHints()
+        InitializeUtilityButtons()
         UpdateHelpText()
 
         ApplicationState.Options = OptionsManager.Load()
@@ -283,4 +285,40 @@ Public Class FormMain
         UpdateHelpText()
 
     End Sub
+
+    Private Sub btnAdvManager_Click(sender As Object, e As EventArgs) Handles btnAdvManager.Click, btnPos.Click, btnAdvGroups.Click, btnAdvRedeem.Click, btnKioskSetup.Click, btnAdvKiosk.Click, btnAdvReportEditor.Click
+        Dim caller = DirectCast(sender, Button)
+        Dim executable = caller.Name.Replace("btn", "")
+
+
+        Dim fileTemp = IO.Path.GetDirectoryName(SystemInfo.GetAdvantageDllPath)
+        fileTemp = IO.Path.Combine(fileTemp, executable)
+        tbTest1.Text = fileTemp & ".exe"
+        executable = fileTemp & ".exe"
+
+        Dim startinfo As ProcessStartInfo = New ProcessStartInfo(executable)
+        startinfo.Arguments = ""
+        startinfo.FileName = executable
+
+        Process.Start(startinfo)
+    End Sub
+
+    Private Sub btnTaskManager_Click(sender As Object, e As EventArgs) Handles btnTaskManager.Click, btnCalculator.Click, btnServices.Click, btnEventViewer.Click
+        Dim caller = DirectCast(sender, Button)
+
+
+        Select Case caller.Name
+            Case "btnTaskManager"
+                Process.Start("C:\Windows\System32\taskmgr.exe")
+            Case "btnCalculator"
+                Process.Start("C:\Windows\System32\calc.exe")
+            Case "btnServices"
+                Process.Start(New ProcessStartInfo("services.msc") With {.UseShellExecute = True})
+            Case "btnEventViewer"
+                Process.Start(New ProcessStartInfo("eventvwr.msc") With {.UseShellExecute = True})
+        End Select
+
+
+    End Sub
+
 End Class

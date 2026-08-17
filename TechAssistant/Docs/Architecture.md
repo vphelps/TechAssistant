@@ -2,7 +2,7 @@
 
 ## Application Overview
 
-TechAssistant is a WinForms application focused on diagnostics, configuration review, and database analytics for CenterEdge / Advantage environments.
+TechAssistant is a WinForms application focused on diagnostics, administration, configuration review, and database analytics for CenterEdge / Advantage environments.
 
 The application is organized into:
 
@@ -25,7 +25,7 @@ Displays workstation and environment diagnostics.
 
 ### CE Db Info
 
-Displays CenterEdge configuration data.
+Displays database configuration information.
 
 Child tabs:
 
@@ -35,12 +35,71 @@ Child tabs:
 
 ### Database Analytics
 
-Displays historical and analytical database information.
+Displays database reporting and analytics.
 
 Child tabs:
 
 - Database Table Sizes
-- Database Growth by Day
+- Database Growth By Day
+
+### Utility Launchers
+
+Provides quick access to:
+
+#### Advantage Utilities
+
+- Advantage Manager
+- Point of Sale
+- Advantage Groups
+- Advantage Redemption
+- Advantage Kiosk
+- Kiosk Setup
+- Advantage Report Editor
+
+#### Windows Utilities
+
+- Calculator
+- Task Manager
+- Services
+- Event Viewer
+
+---
+
+# Form Partials
+
+## FormMain.Hints.vb
+
+Responsible for:
+
+- Quick Tips initialization
+- Context-sensitive help
+- RichTextBox formatting
+- Tab-based hint selection
+
+### Features
+
+- Dictionary-based hint storage
+- Shared grid export tip generation
+- Automatic help updates
+
+---
+
+## FormMain.Icons.vb
+
+Responsible for:
+
+- Utility button initialization
+- Icon extraction
+- Tooltip assignment
+- Advantage utility registration
+- Windows utility registration
+
+### Features
+
+- ToolButtonDefinition model
+- ToolCategory enumeration
+- Automatic executable icon extraction
+- Multiple tooltip categories
 
 ---
 
@@ -49,8 +108,6 @@ Child tabs:
 ## AppOptions
 
 Stores persisted user preferences.
-
-Current settings:
 
 ### Application
 
@@ -81,7 +138,7 @@ Provides application-wide runtime state.
 
 Current usage:
 
-- Loaded application options
+- Loaded AppOptions instance
 
 ---
 
@@ -99,27 +156,27 @@ Utility methods for DataTable manipulation.
 
 ## GridContextMenuHelper
 
-Provides DataGridView context menu functionality.
+Provides DataGridView export functionality.
 
 ### Features
 
 - Copy Cell
-- Copy Row for Excel / Google Sheets
+- Copy Row for Excel
 - Copy Row as CSV
-- Copy All for Excel / Google Sheets
+- Copy All for Excel
 - Copy All as CSV
 
 ### Export Behavior
 
-- Excludes section headers
-- Supports CSV formatting
-- Supports spreadsheet-compatible formatting
+- Excludes section header rows
+- Supports spreadsheet-compatible export
+- Supports CSV export
 
 ---
 
 ## MessageHelper
 
-Provides standardized application messages.
+Provides standardized user messaging.
 
 ### Message Types
 
@@ -132,7 +189,7 @@ Provides standardized application messages.
 
 ## OptionsManager
 
-Loads and saves user settings.
+Loads and saves user configuration.
 
 Storage location:
 
@@ -140,24 +197,12 @@ Storage location:
 %APPDATA%\TechAssistant\options.json
 ```
 
-Uses:
+### Responsibilities
 
-- JSON serialization
-- Automatic option creation
-- Automatic option loading
-
----
-
-# Form Partials
-
-## FormMain.Hints.vb
-
-Responsible for:
-
-- Hint initialization
-- Context-sensitive help
-- Quick Tips display
-- RichTextBox formatting
+- Create default options
+- Load options
+- Save options
+- Validate option persistence
 
 ---
 
@@ -165,7 +210,7 @@ Responsible for:
 
 ## DatabaseService
 
-Provides SQL Server interaction.
+Provides database interaction.
 
 Typical operations:
 
@@ -178,16 +223,14 @@ Typical operations:
 
 ## SystemInfo
 
-Builds system-information datasets.
+Builds datasets for:
 
-Information categories include:
-
-- Computer
-- Operating System
-- Hardware
-- Network
-- Database
-- Advantage
+- Computer Information
+- Operating System Information
+- Hardware Information
+- Network Information
+- Database Information
+- Advantage Information
 
 ---
 
@@ -195,9 +238,8 @@ Information categories include:
 
 ## Resources.resx
 
-Embedded resources used throughout the application.
+Embedded application resources including:
 
-Examples:
-
-- Context menu icons
+- Context menu images
 - Application images
+- Future UI assets
