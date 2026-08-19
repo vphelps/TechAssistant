@@ -1,7 +1,13 @@
 ﻿Imports System.ComponentModel
+Imports System.DirectoryServices.ActiveDirectory
 Imports Microsoft.Data.SqlClient
 
 Public Class FormMain
+    Private _savedServiceSelections As New List(Of String)
+    Private _serviceOperationInProgress As Boolean
+    Private _currentServiceOperation As String = String.Empty
+    Private _currentServiceIndex As Integer
+    Private _totalServiceOperations As Integer
 
     Private Sub UpdateHelpText()
 
@@ -25,6 +31,7 @@ Public Class FormMain
     End Sub
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim strTemp As String = Nothing
+        ApplicationState.RunningAsAdmin = SecurityHelper.IsRunningElevated()
 
         GridContextMenuHelper.Attach(dgvSystemInfo)
         GridContextMenuHelper.Attach(dgvApplicationInfo)
@@ -39,25 +46,9 @@ Public Class FormMain
         UpdateHelpText()
 
         ApplicationState.Options = OptionsManager.Load()
-        Me.StartPosition = FormStartPosition.Manual
-        Me.Left = ApplicationState.Options.WindowLeft
-        Me.Top = ApplicationState.Options.WindowTop
-        Me.Width = ApplicationState.Options.WindowWidth
-        Me.Height = ApplicationState.Options.WindowHeight
-        Me.WindowState = ApplicationState.Options.WindowState
-        Me.Text = ApplicationState.Options.WindowTitle
+        InitialLoad()
 
-        tbWindowTitle.Text = ApplicationState.Options.WindowTitle
-
-        tbTest1.Text = System.IO.Path.GetDirectoryName(SystemInfo.GetAdvantageDllPath)
-
-
-
-        Dim fileTemp As String = System.IO.Path.GetDirectoryName(SystemInfo.GetAdvantageDllPath)
-        fileTemp = System.IO.Path.Combine(fileTemp, "AdvManager.exe")
-        Using icon As Icon = System.Drawing.Icon.ExtractAssociatedIcon(fileTemp)
-            btnIconTest.Image = icon.ToBitmap()
-        End Using
+        LoadServices()
 
     End Sub
     Private Sub FormMain_FormClosing(
@@ -71,6 +62,7 @@ Public Class FormMain
             ApplicationState.Options.WindowWidth = Me.Width
             ApplicationState.Options.WindowHeight = Me.Height
         End If
+        ApplicationState.Options.WindowTitle = tbWindowTitle.Text
 
         ApplicationState.Options.WindowState = Me.WindowState
         ApplicationState.Save()
@@ -106,31 +98,6 @@ Public Class FormMain
     Private Sub btnTestUpdate_Click(
     sender As Object,
     e As EventArgs) Handles btnTestUpdate.Click
-
-        Try
-
-            Dim sql As String =
-            "UPDATE AppOptions
-             SET OptionValue = CONVERT(VARCHAR(24), DATEADD(DAY, 1, GETDATE()), 120) + 'Z'
-             WHERE OptionName = 'AdminUnlockedUntil'"
-
-            Dim rowsAffected As Integer =
-            DatabaseService.ExecuteNonQuery(sql)
-
-            MessageBox.Show(
-            $"{rowsAffected} row(s) updated.",
-            "Update Successful")
-            btnTest1.PerformClick()
-
-        Catch ex As Exception
-
-            MessageBox.Show(
-            ex.Message,
-            "Database Error",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Error)
-
-        End Try
 
     End Sub
 
@@ -235,7 +202,14 @@ Public Class FormMain
         Next
 
     End Sub
+    Private Sub dgvServices_DataBindingComplete(
+    sender As Object,
+    e As DataGridViewBindingCompleteEventArgs) _
+    Handles dgvServices.DataBindingComplete
 
+        FormatServiceGrid()
+
+    End Sub
 
     Private Sub tpSystemInfo_Enter(
     sender As Object,
@@ -257,8 +231,10 @@ Public Class FormMain
     End Sub
 
     Private Sub btnTest3_Click(sender As Object, e As EventArgs) Handles btnTest3.Click
-        MessageHelper.ShowError(
-    "Unable to connect to the database.")
+        Debug.WriteLine(
+    My.Resources.Resources.GreenCircle.GetType().FullName)
+        PictureBox1.Image =
+    My.Resources.Resources.GreenCircle
     End Sub
 
     Private Sub btnTest4_Click(sender As Object, e As EventArgs) Handles btnTest4.Click
@@ -284,6 +260,18 @@ Public Class FormMain
 
         UpdateHelpText()
 
+        If tcFormMain.SelectedTab Is tpServices Then
+
+            tmrServices.Start()
+
+        Else
+
+            tmrServices.Stop()
+
+        End If
+
+        tbTest1.Text = tmrServices.Enabled.ToString
+
     End Sub
 
     Private Sub btnAdvManager_Click(sender As Object, e As EventArgs) Handles btnAdvManager.Click, btnPos.Click, btnAdvGroups.Click, btnAdvRedeem.Click, btnKioskSetup.Click, btnAdvKiosk.Click, btnAdvReportEditor.Click
@@ -293,14 +281,18 @@ Public Class FormMain
 
         Dim fileTemp = IO.Path.GetDirectoryName(SystemInfo.GetAdvantageDllPath)
         fileTemp = IO.Path.Combine(fileTemp, executable)
-        tbTest1.Text = fileTemp & ".exe"
         executable = fileTemp & ".exe"
+
+        If Not System.IO.File.Exists(executable) Then
+            Return
+        End If
+        tbTest1.Text = executable
 
         Dim startinfo As ProcessStartInfo = New ProcessStartInfo(executable)
         startinfo.Arguments = ""
         startinfo.FileName = executable
 
-        Process.Start(startinfo)
+        'Process.Start(startinfo)
     End Sub
 
     Private Sub btnTaskManager_Click(sender As Object, e As EventArgs) Handles btnTaskManager.Click, btnCalculator.Click, btnServices.Click, btnEventViewer.Click
@@ -321,4 +313,111 @@ Public Class FormMain
 
     End Sub
 
+    Private Sub btnAdminUnlock_Click(sender As Object, e As EventArgs) Handles btnAdminUnlock.Click
+        Try
+
+            Dim sql As String =
+            "UPDATE AppOptions
+             SET OptionValue = CONVERT(VARCHAR(24), DATEADD(DAY, 1, GETDATE()), 120) + 'Z'
+             WHERE OptionName = 'AdminUnlockedUntil'"
+
+            Dim rowsAffected As Integer =
+            DatabaseService.ExecuteNonQuery(sql)
+
+        Catch ex As Exception
+
+            MessageBox.Show(
+            ex.Message,
+            "Database Error",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Error)
+
+        End Try
+
+
+    End Sub
+    Private Sub tmrServices_Tick(sender As Object,
+    e As EventArgs) Handles tmrServices.Tick
+
+        If Not _serviceOperationInProgress Then Exit Sub
+        LoadServices()
+        dgvServices.ClearSelection()
+        dgvServices.CurrentCell = Nothing
+        lblServiceStatus.Text = $"Processing ({_currentServiceIndex} of {_totalServiceOperations}): {_currentServiceOperation}"
+
+    End Sub
+
+
+    Private Sub btnServicesRefresh_Click(sender As Object, e As EventArgs) Handles btnServicesRefresh.Click
+        Dim selectedServices = GetSelectedServiceNames()
+        LoadServices()
+        RestoreSelectedServices(selectedServices)
+    End Sub
+
+    Private Async Sub btnServiceRestart_Click(sender As Object, e As EventArgs) Handles btnServiceRestart.Click
+
+        Dim services = GetSelectedServiceNames()
+
+        If services.Count = 0 Then Exit Sub
+
+        Dim message As String =
+        "Restart the following services?" &
+        Environment.NewLine &
+        Environment.NewLine &
+        String.Join(
+            Environment.NewLine,
+            services)
+
+        If MessageHelper.ShowQuestion(message) <> DialogResult.Yes Then
+            Exit Sub
+        End If
+
+        Await PerformServiceOperation(services, AddressOf ServiceHelper.RestartService, "Restart")
+
+    End Sub
+    Private Async Sub btnServiceStart_Click(sender As Object, e As EventArgs) Handles btnServiceStart.Click
+
+        Dim services = GetSelectedServiceNames()
+
+        If services.Count = 0 Then Exit Sub
+
+        Dim message As String =
+        "Start the following services?" &
+        Environment.NewLine &
+        Environment.NewLine &
+        String.Join(
+            Environment.NewLine,
+            services)
+
+        If MessageHelper.ShowQuestion(message) <> DialogResult.Yes Then
+            Exit Sub
+        End If
+
+        Await PerformServiceOperation(services, AddressOf ServiceHelper.StartService, "Start")
+
+    End Sub
+
+    Private Async Sub btnServiceStop_Click(sender As Object, e As EventArgs) Handles btnServiceStop.Click
+
+        Dim services = GetSelectedServiceNames()
+
+        If services.Count = 0 Then Exit Sub
+
+        Dim message As String =
+        "Stop the following services?" &
+        Environment.NewLine &
+        Environment.NewLine &
+        String.Join(
+            Environment.NewLine,
+            services)
+
+        If MessageHelper.ShowQuestion(message) <> DialogResult.Yes Then
+
+            Exit Sub
+
+        End If
+
+        Await PerformServiceOperation(services, AddressOf ServiceHelper.StopService, "Stop")
+
+    End Sub
 End Class

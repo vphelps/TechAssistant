@@ -5,6 +5,9 @@
 
     Public Shared Property Options As AppOptions
 
+    Public Shared Property RunningAsAdmin As Boolean = False
+
+
     Public Shared Sub Save()
 
         OptionsManager.Save(

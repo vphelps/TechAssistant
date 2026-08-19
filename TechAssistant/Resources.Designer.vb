@@ -93,5 +93,45 @@ Namespace My.Resources
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend Shared ReadOnly Property GrayCircle() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("GrayCircle", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend Shared ReadOnly Property GreenCircle() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("GreenCircle", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend Shared ReadOnly Property RedCircle() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("RedCircle", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend Shared ReadOnly Property YellowCircle() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("YellowCircle", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
     End Class
 End Namespace

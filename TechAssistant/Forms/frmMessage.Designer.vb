@@ -23,7 +23,6 @@ Partial Class frmMessage
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         picIcon = New PictureBox()
-        lblTitle = New Label()
         lblMessage = New Label()
         btnOk = New Button()
         btnCancel = New Button()
@@ -40,15 +39,6 @@ Partial Class frmMessage
         picIcon.SizeMode = PictureBoxSizeMode.AutoSize
         picIcon.TabIndex = 0
         picIcon.TabStop = False
-        ' 
-        ' lblTitle
-        ' 
-        lblTitle.AutoSize = True
-        lblTitle.Location = New Point(20, 85)
-        lblTitle.Name = "lblTitle"
-        lblTitle.Size = New Size(43, 15)
-        lblTitle.TabIndex = 1
-        lblTitle.Text = "lblTitle"
         ' 
         ' lblMessage
         ' 
@@ -119,7 +109,6 @@ Partial Class frmMessage
         Controls.Add(btnCancel)
         Controls.Add(btnOk)
         Controls.Add(lblMessage)
-        Controls.Add(lblTitle)
         Controls.Add(picIcon)
         ForeColor = SystemColors.ControlText
         FormBorderStyle = FormBorderStyle.FixedDialog
@@ -135,7 +124,6 @@ Partial Class frmMessage
     End Sub
 
     Friend WithEvents picIcon As PictureBox
-    Friend WithEvents lblTitle As Label
     Friend WithEvents lblMessage As Label
     Friend WithEvents btnOk As Button
     Friend WithEvents btnCancel As Button

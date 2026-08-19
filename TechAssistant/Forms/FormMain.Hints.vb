@@ -43,6 +43,14 @@ Partial Public Class FormMain
             "• Shows the size of the database per day to track size changes." & Environment.NewLine &
             "• Useful for tracking database growth over time.")
 
+        _hints(tpServices.Name) =
+            "Advantage/SQL Services" & Environment.NewLine &
+            Environment.NewLine &
+            "• Shows the status of the Advantage/SQL services." & Environment.NewLine &
+            "• Use buttons to Start, Stop, or Restart the services." & Environment.NewLine &
+            Environment.NewLine &
+            "• Only available when running as an administrator."
+
     End Sub
     Private Function AddGridTips(
         text As String) As String

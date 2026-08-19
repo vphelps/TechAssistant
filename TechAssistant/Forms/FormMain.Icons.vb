@@ -116,9 +116,19 @@
     Private Function GetAdvantagePath(
     exeName As String) As String
 
+        Dim dllPath As String =
+        SystemInfo.GetAdvantageDllPath
+
+        If String.IsNullOrWhiteSpace(dllPath) Then
+            Return String.Empty
+        End If
+
         Dim folder As String =
-        IO.Path.GetDirectoryName(
-            SystemInfo.GetAdvantageDllPath)
+        IO.Path.GetDirectoryName(dllPath)
+
+        If String.IsNullOrWhiteSpace(folder) Then
+            Return String.Empty
+        End If
 
         Return IO.Path.Combine(
         folder,
@@ -149,6 +159,7 @@
         tool.ToolTip)
 
         If Not IO.File.Exists(tool.FilePath) Then
+            tool.Button.Visible = False
             Exit Sub
         End If
 
