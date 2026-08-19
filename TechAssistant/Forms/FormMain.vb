@@ -51,10 +51,7 @@ Public Class FormMain
         LoadServices()
 
     End Sub
-    Private Sub FormMain_FormClosing(
-    sender As Object,
-    e As FormClosingEventArgs) _
-    Handles Me.FormClosing
+    Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
         If Me.WindowState = FormWindowState.Normal Then
             ApplicationState.Options.WindowLeft = Me.Left
@@ -69,9 +66,7 @@ Public Class FormMain
 
     End Sub
 
-    Private Sub btnTestConnection_Click(
-        sender As Object,
-        e As EventArgs) Handles btnTestConnection.Click
+    Private Sub btnTestConnection_Click(sender As Object, e As EventArgs) Handles btnTestConnection.Click
 
         Try
             'Dim sql As String = "SELECT DB_NAME() AS DatabaseName;"
@@ -95,9 +90,7 @@ Public Class FormMain
     End Sub
 
 
-    Private Sub btnTestUpdate_Click(
-    sender As Object,
-    e As EventArgs) Handles btnTestUpdate.Click
+    Private Sub btnTestUpdate_Click(sender As Object, e As EventArgs) Handles btnTestUpdate.Click
 
     End Sub
 
@@ -174,10 +167,7 @@ Public Class FormMain
             MessageBox.Show($"Error loading Database Growth by Day:{Environment.NewLine}{ex.Message}")
         End Try
     End Sub
-    Private Sub dgvSystemInfo_DataBindingComplete(
-    sender As Object,
-    e As DataGridViewBindingCompleteEventArgs) _
-    Handles dgvSystemInfo.DataBindingComplete
+    Private Sub dgvSystemInfo_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvSystemInfo.DataBindingComplete
 
         For Each row As DataGridViewRow In dgvSystemInfo.Rows
 
@@ -202,18 +192,13 @@ Public Class FormMain
         Next
 
     End Sub
-    Private Sub dgvServices_DataBindingComplete(
-    sender As Object,
-    e As DataGridViewBindingCompleteEventArgs) _
-    Handles dgvServices.DataBindingComplete
+    Private Sub dgvServices_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvServices.DataBindingComplete
 
         FormatServiceGrid()
 
     End Sub
 
-    Private Sub tpSystemInfo_Enter(
-    sender As Object,
-    e As EventArgs) Handles tpSystemInfo.Enter
+    Private Sub tpSystemInfo_Enter(sender As Object, e As EventArgs) Handles tpSystemInfo.Enter
 
         dgvSystemInfo.DataSource =
         SystemInfo.BuildSystemInfoTable()
@@ -231,10 +216,7 @@ Public Class FormMain
     End Sub
 
     Private Sub btnTest3_Click(sender As Object, e As EventArgs) Handles btnTest3.Click
-        Debug.WriteLine(
-    My.Resources.Resources.GreenCircle.GetType().FullName)
-        PictureBox1.Image =
-    My.Resources.Resources.GreenCircle
+
     End Sub
 
     Private Sub btnTest4_Click(sender As Object, e As EventArgs) Handles btnTest4.Click
@@ -295,9 +277,8 @@ Public Class FormMain
         'Process.Start(startinfo)
     End Sub
 
-    Private Sub btnTaskManager_Click(sender As Object, e As EventArgs) Handles btnTaskManager.Click, btnCalculator.Click, btnServices.Click, btnEventViewer.Click
+    Private Sub btnTaskManager_Click(sender As Object, e As EventArgs) Handles btnTaskManager.Click, btnCalculator.Click, btnServices.Click, btnEventViewer.Click, btnAppWiz.Click, btnDevices.Click
         Dim caller = DirectCast(sender, Button)
-
 
         Select Case caller.Name
             Case "btnTaskManager"
@@ -308,8 +289,11 @@ Public Class FormMain
                 Process.Start(New ProcessStartInfo("services.msc") With {.UseShellExecute = True})
             Case "btnEventViewer"
                 Process.Start(New ProcessStartInfo("eventvwr.msc") With {.UseShellExecute = True})
+            Case "btnAppWiz"
+                Process.Start(New ProcessStartInfo("appwiz.cpl") With {.UseShellExecute = True})
+            Case "btnDevices"
+                Process.Start(New ProcessStartInfo("control.exe", "/name Microsoft.DevicesAndPrinters") With {.UseShellExecute = True})
         End Select
-
 
     End Sub
 
@@ -336,8 +320,7 @@ Public Class FormMain
 
 
     End Sub
-    Private Sub tmrServices_Tick(sender As Object,
-    e As EventArgs) Handles tmrServices.Tick
+    Private Sub tmrServices_Tick(sender As Object, e As EventArgs) Handles tmrServices.Tick
 
         If Not _serviceOperationInProgress Then Exit Sub
         LoadServices()
@@ -420,4 +403,5 @@ Public Class FormMain
         Await PerformServiceOperation(services, AddressOf ServiceHelper.StopService, "Stop")
 
     End Sub
+
 End Class

@@ -60,6 +60,8 @@
 - Task Manager
 - Services
 - Event Viewer
+- Programs and Features
+- Devices and Printers
 
 #### Features
 

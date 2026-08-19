@@ -45,10 +45,6 @@ Partial Class FormMain
         dgvTableSizes = New DataGridView()
         tpSizeByDay = New TabPage()
         dgvGrowthByDay = New DataGridView()
-        tpOptions = New TabPage()
-        gbTechAssistOptions = New GroupBox()
-        tbWindowTitle = New TextBox()
-        lblWindowTitle = New Label()
         tpServices = New TabPage()
         gbServices = New GroupBox()
         tlpServices = New TableLayoutPanel()
@@ -60,6 +56,10 @@ Partial Class FormMain
         dgvServices = New DataGridView()
         pbServices = New ProgressBar()
         lblServiceStatus = New Label()
+        tpOptions = New TabPage()
+        gbTechAssistOptions = New GroupBox()
+        tbWindowTitle = New TextBox()
+        lblWindowTitle = New Label()
         tlpFormMain = New TableLayoutPanel()
         flpFormButtonsBottom = New FlowLayoutPanel()
         btnAdminUnlock = New Button()
@@ -81,14 +81,15 @@ Partial Class FormMain
         btnCalculator = New Button()
         btnServices = New Button()
         btnEventViewer = New Button()
+        btnAppWiz = New Button()
         scFormMainTopRight = New SplitContainer()
         flpFormButtonsTop = New FlowLayoutPanel()
         rtbHints = New RichTextBox()
         flpAppButtons = New FlowLayoutPanel()
-        PictureBox1 = New PictureBox()
         ttAdvantageButtons = New ToolTip(components)
         ttUtilityButtons = New ToolTip(components)
         tmrServices = New Timer(components)
+        btnDevices = New Button()
         tcFormMain.SuspendLayout()
         tpSystemInfo.SuspendLayout()
         CType(dgvSystemInfo, ComponentModel.ISupportInitialize).BeginInit()
@@ -106,13 +107,13 @@ Partial Class FormMain
         CType(dgvTableSizes, ComponentModel.ISupportInitialize).BeginInit()
         tpSizeByDay.SuspendLayout()
         CType(dgvGrowthByDay, ComponentModel.ISupportInitialize).BeginInit()
-        tpOptions.SuspendLayout()
-        gbTechAssistOptions.SuspendLayout()
         tpServices.SuspendLayout()
         gbServices.SuspendLayout()
         tlpServices.SuspendLayout()
         flpServicesButtons.SuspendLayout()
         CType(dgvServices, ComponentModel.ISupportInitialize).BeginInit()
+        tpOptions.SuspendLayout()
+        gbTechAssistOptions.SuspendLayout()
         tlpFormMain.SuspendLayout()
         flpFormButtonsBottom.SuspendLayout()
         flpTest.SuspendLayout()
@@ -123,8 +124,6 @@ Partial Class FormMain
         scFormMainTopRight.Panel2.SuspendLayout()
         scFormMainTopRight.SuspendLayout()
         flpFormButtonsTop.SuspendLayout()
-        flpAppButtons.SuspendLayout()
-        CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' btnTestConnection
@@ -381,45 +380,6 @@ Partial Class FormMain
         dgvGrowthByDay.Size = New Size(779, 484)
         dgvGrowthByDay.TabIndex = 0
         ' 
-        ' tpOptions
-        ' 
-        tpOptions.BackColor = SystemColors.ControlDark
-        tpOptions.Controls.Add(gbTechAssistOptions)
-        tpOptions.Location = New Point(4, 24)
-        tpOptions.Name = "tpOptions"
-        tpOptions.Size = New Size(799, 524)
-        tpOptions.TabIndex = 3
-        tpOptions.Text = "Options"
-        ' 
-        ' gbTechAssistOptions
-        ' 
-        gbTechAssistOptions.BackColor = SystemColors.Control
-        gbTechAssistOptions.Controls.Add(tbWindowTitle)
-        gbTechAssistOptions.Controls.Add(lblWindowTitle)
-        gbTechAssistOptions.Location = New Point(5, 8)
-        gbTechAssistOptions.Name = "gbTechAssistOptions"
-        gbTechAssistOptions.Size = New Size(723, 193)
-        gbTechAssistOptions.TabIndex = 0
-        gbTechAssistOptions.TabStop = False
-        gbTechAssistOptions.Text = "Tech Assistant Options"
-        ' 
-        ' tbWindowTitle
-        ' 
-        tbWindowTitle.Location = New Point(116, 21)
-        tbWindowTitle.Name = "tbWindowTitle"
-        tbWindowTitle.Size = New Size(273, 23)
-        tbWindowTitle.TabIndex = 1
-        tbWindowTitle.Text = "tbWindowTitle"
-        ' 
-        ' lblWindowTitle
-        ' 
-        lblWindowTitle.AutoSize = True
-        lblWindowTitle.Location = New Point(23, 24)
-        lblWindowTitle.Name = "lblWindowTitle"
-        lblWindowTitle.Size = New Size(86, 15)
-        lblWindowTitle.TabIndex = 0
-        lblWindowTitle.Text = "Window Title:  "
-        ' 
         ' tpServices
         ' 
         tpServices.Controls.Add(gbServices)
@@ -548,6 +508,45 @@ Partial Class FormMain
         lblServiceStatus.TabIndex = 7
         lblServiceStatus.Text = "Label1"
         lblServiceStatus.Visible = False
+        ' 
+        ' tpOptions
+        ' 
+        tpOptions.BackColor = SystemColors.ControlDark
+        tpOptions.Controls.Add(gbTechAssistOptions)
+        tpOptions.Location = New Point(4, 24)
+        tpOptions.Name = "tpOptions"
+        tpOptions.Size = New Size(799, 524)
+        tpOptions.TabIndex = 3
+        tpOptions.Text = "Options"
+        ' 
+        ' gbTechAssistOptions
+        ' 
+        gbTechAssistOptions.BackColor = SystemColors.Control
+        gbTechAssistOptions.Controls.Add(tbWindowTitle)
+        gbTechAssistOptions.Controls.Add(lblWindowTitle)
+        gbTechAssistOptions.Location = New Point(5, 8)
+        gbTechAssistOptions.Name = "gbTechAssistOptions"
+        gbTechAssistOptions.Size = New Size(723, 193)
+        gbTechAssistOptions.TabIndex = 0
+        gbTechAssistOptions.TabStop = False
+        gbTechAssistOptions.Text = "Tech Assistant Options"
+        ' 
+        ' tbWindowTitle
+        ' 
+        tbWindowTitle.Location = New Point(116, 21)
+        tbWindowTitle.Name = "tbWindowTitle"
+        tbWindowTitle.Size = New Size(273, 23)
+        tbWindowTitle.TabIndex = 1
+        tbWindowTitle.Text = "tbWindowTitle"
+        ' 
+        ' lblWindowTitle
+        ' 
+        lblWindowTitle.AutoSize = True
+        lblWindowTitle.Location = New Point(23, 24)
+        lblWindowTitle.Name = "lblWindowTitle"
+        lblWindowTitle.Size = New Size(86, 15)
+        lblWindowTitle.TabIndex = 0
+        lblWindowTitle.Text = "Window Title:  "
         ' 
         ' tlpFormMain
         ' 
@@ -715,6 +714,8 @@ Partial Class FormMain
         flpUtilityButtons.Controls.Add(btnCalculator)
         flpUtilityButtons.Controls.Add(btnServices)
         flpUtilityButtons.Controls.Add(btnEventViewer)
+        flpUtilityButtons.Controls.Add(btnAppWiz)
+        flpUtilityButtons.Controls.Add(btnDevices)
         flpUtilityButtons.Location = New Point(445, 32)
         flpUtilityButtons.Name = "flpUtilityButtons"
         flpUtilityButtons.Size = New Size(351, 56)
@@ -751,6 +752,14 @@ Partial Class FormMain
         btnEventViewer.Size = New Size(42, 42)
         btnEventViewer.TabIndex = 17
         btnEventViewer.UseVisualStyleBackColor = True
+        ' 
+        ' btnAppWiz
+        ' 
+        btnAppWiz.Location = New Point(195, 3)
+        btnAppWiz.Name = "btnAppWiz"
+        btnAppWiz.Size = New Size(42, 42)
+        btnAppWiz.TabIndex = 18
+        btnAppWiz.UseVisualStyleBackColor = True
         ' 
         ' scFormMainTopRight
         ' 
@@ -797,21 +806,12 @@ Partial Class FormMain
         ' 
         ' flpAppButtons
         ' 
-        flpAppButtons.Controls.Add(PictureBox1)
         flpAppButtons.Dock = DockStyle.Fill
         flpAppButtons.Location = New Point(1072, 3)
         flpAppButtons.Name = "flpAppButtons"
         tlpFormMain.SetRowSpan(flpAppButtons, 2)
         flpAppButtons.Size = New Size(155, 655)
         flpAppButtons.TabIndex = 11
-        ' 
-        ' PictureBox1
-        ' 
-        PictureBox1.Location = New Point(3, 3)
-        PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(100, 50)
-        PictureBox1.TabIndex = 0
-        PictureBox1.TabStop = False
         ' 
         ' ttAdvantageButtons
         ' 
@@ -828,6 +828,14 @@ Partial Class FormMain
         ' tmrServices
         ' 
         tmrServices.Interval = 1000
+        ' 
+        ' btnDevices
+        ' 
+        btnDevices.Location = New Point(243, 3)
+        btnDevices.Name = "btnDevices"
+        btnDevices.Size = New Size(42, 42)
+        btnDevices.TabIndex = 19
+        btnDevices.UseVisualStyleBackColor = True
         ' 
         ' FormMain
         ' 
@@ -856,15 +864,15 @@ Partial Class FormMain
         CType(dgvTableSizes, ComponentModel.ISupportInitialize).EndInit()
         tpSizeByDay.ResumeLayout(False)
         CType(dgvGrowthByDay, ComponentModel.ISupportInitialize).EndInit()
-        tpOptions.ResumeLayout(False)
-        gbTechAssistOptions.ResumeLayout(False)
-        gbTechAssistOptions.PerformLayout()
         tpServices.ResumeLayout(False)
         gbServices.ResumeLayout(False)
         tlpServices.ResumeLayout(False)
         tlpServices.PerformLayout()
         flpServicesButtons.ResumeLayout(False)
         CType(dgvServices, ComponentModel.ISupportInitialize).EndInit()
+        tpOptions.ResumeLayout(False)
+        gbTechAssistOptions.ResumeLayout(False)
+        gbTechAssistOptions.PerformLayout()
         tlpFormMain.ResumeLayout(False)
         flpFormButtonsBottom.ResumeLayout(False)
         flpTest.ResumeLayout(False)
@@ -876,8 +884,6 @@ Partial Class FormMain
         CType(scFormMainTopRight, ComponentModel.ISupportInitialize).EndInit()
         scFormMainTopRight.ResumeLayout(False)
         flpFormButtonsTop.ResumeLayout(False)
-        flpAppButtons.ResumeLayout(False)
-        CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
     End Sub
 
@@ -941,11 +947,12 @@ Partial Class FormMain
     Friend WithEvents btnServiceStart As Button
     Friend WithEvents btnServicesRefresh As Button
     Friend WithEvents gbServices As GroupBox
-    Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents tmrServices As Timer
     Friend WithEvents lblServiceStatus As Label
     Friend WithEvents pbServices As ProgressBar
     Friend WithEvents tlpServices As TableLayoutPanel
     Friend WithEvents flpServicesButtons As FlowLayoutPanel
+    Friend WithEvents btnAppWiz As Button
+    Friend WithEvents btnDevices As Button
 
 End Class

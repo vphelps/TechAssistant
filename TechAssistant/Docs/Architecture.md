@@ -487,6 +487,8 @@ Calculator
 Task Manager
 Services
 Event Viewer
+Programs and Features
+Devices and Printers
 ```
 
 Application icons are automatically extracted when available.

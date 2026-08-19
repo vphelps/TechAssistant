@@ -234,6 +234,8 @@ Launch commonly used Windows administration tools:
 - Task Manager
 - Services
 - Event Viewer
+- Programs and Features
+- Devices and Printers
 
 Icons are automatically extracted from the associated executable when available.
 

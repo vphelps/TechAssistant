@@ -103,7 +103,19 @@
             .FilePath = "C:\Windows\System32\eventvwr.msc",
             .ToolTip = "Open Event Viewer",
             .Category = ToolCategory.Windows
-        }
+        },
+        New ToolButtonDefinition With {
+            .Button = btnAppWiz,
+            .FilePath = "C:\Windows\System32\appwiz.cpl",
+            .ToolTip = "Open Add/Remove Programs",
+            .Category = ToolCategory.Windows
+        },
+        New ToolButtonDefinition With {
+            .Button = btnDevices,
+            .FilePath = "C:\Windows\System32\DeviceCenter.dll",
+            .ToolTip = "Open Devices and Printers",
+            .Category = ToolCategory.Windows
+            }
     }
 
         For Each item In buttons
