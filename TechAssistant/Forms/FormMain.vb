@@ -1,5 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.DirectoryServices.ActiveDirectory
+Imports System.Net.NetworkInformation
+Imports System.Net.Sockets
 Imports Microsoft.Data.SqlClient
 
 Public Class FormMain
@@ -39,11 +41,13 @@ Public Class FormMain
         GridContextMenuHelper.Attach(dgvWebOptions)
         GridContextMenuHelper.Attach(dgvTableSizes)
         GridContextMenuHelper.Attach(dgvGrowthByDay)
+        GridContextMenuHelper.Attach(dgvPortProcesses)
 
         InitializeIcons()
         InitializeHints()
         InitializeUtilityButtons()
         UpdateHelpText()
+        LoadPortDefinitions()
 
         ApplicationState.Options = OptionsManager.Load()
         InitialLoad()
@@ -401,6 +405,282 @@ Public Class FormMain
         End If
 
         Await PerformServiceOperation(services, AddressOf ServiceHelper.StopService, "Stop")
+
+    End Sub
+
+    Private Async Sub btnPing_Click(
+    sender As Object,
+    e As EventArgs) Handles btnPing.Click
+
+        Dim host As String =
+        tbPingHost.Text.Trim()
+
+        rtbPingResults.Clear()
+
+        If String.IsNullOrWhiteSpace(host) Then
+
+            rtbPingResults.Text =
+            "Host is required."
+
+            Exit Sub
+
+        End If
+
+        Try
+
+            Dim totalTime As Long = 0
+            Dim successCount As Integer = 0
+
+            For i As Integer = 1 To CInt(nudPingCount.Value)
+
+                Dim reply =
+                Await PingHostAsync(host)
+
+                If reply.Status =
+                IPStatus.Success Then
+
+                    successCount += 1
+                    totalTime += reply.RoundtripTime
+
+                    rtbPingResults.AppendText(
+                    $"Reply {i}: {reply.Address}" &
+                    Environment.NewLine)
+
+                    rtbPingResults.AppendText(
+                    $"Time: {reply.RoundtripTime} ms" &
+                    Environment.NewLine)
+
+                Else
+
+                    rtbPingResults.AppendText(
+                    $"Reply {i}: {reply.Status}" &
+                    Environment.NewLine)
+
+                End If
+
+                rtbPingResults.AppendText(
+                Environment.NewLine)
+
+            Next
+
+            If successCount > 0 Then
+
+                rtbPingResults.AppendText(
+                $"Average: {totalTime / successCount} ms")
+
+            End If
+
+        Catch ex As Exception
+
+            rtbPingResults.Text =
+            ex.Message
+
+        End Try
+
+    End Sub
+    Private Async Sub btnTcpTest_Click(
+    sender As Object,
+    e As EventArgs) Handles btnTcpTest.Click
+
+        Dim host As String =
+            tbTcpHost.Text.Trim()
+
+        Dim port As Integer =
+            CInt(nudTcpPort.Value)
+
+        rtbTcpResults.Clear()
+
+        Try
+
+            Dim stopwatch As New Stopwatch()
+
+            Using client As New TcpClient()
+
+                stopwatch.Start()
+
+                Await client.ConnectAsync(
+                    host,
+                    port)
+
+                stopwatch.Stop()
+
+                rtbTcpResults.AppendText(
+                    "Connection Successful" &
+                    Environment.NewLine &
+                    Environment.NewLine)
+
+                rtbTcpResults.AppendText(
+                    $"Host: {host}" &
+                    Environment.NewLine)
+
+                rtbTcpResults.AppendText(
+                    $"Port: {port}" &
+                    Environment.NewLine)
+
+                rtbTcpResults.AppendText(
+                    $"Connection Time: {stopwatch.ElapsedMilliseconds} ms")
+
+            End Using
+
+        Catch ex As SocketException
+
+            rtbTcpResults.Text =
+                "Connection Failed" &
+                Environment.NewLine &
+                Environment.NewLine &
+                ex.Message
+
+        Catch ex As Exception
+
+            rtbTcpResults.Text =
+                ex.Message
+
+        End Try
+
+    End Sub
+    Private Sub cboPortPresets_SelectedIndexChanged(
+    sender As Object,
+    e As EventArgs) Handles cbPortPresets.SelectedIndexChanged
+
+        Select Case cbPortPresets.Text
+
+            Case "SQL Server (1433)"
+                nudTcpPort.Value = 1433
+
+            Case "Advantage API Service (15059)"
+                nudTcpPort.Value = 15059
+
+            Case "Credit Cards (31420)"
+                nudTcpPort.Value = 31420
+
+        End Select
+
+    End Sub
+
+    Private Async Sub btnValidateCenterEdgePorts_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnValidateCenterEdgePorts.Click
+
+        Dim host As String =
+        tbTcpHost.Text.Trim()
+
+        btnValidateCenterEdgePorts.Enabled = False
+
+        Try
+
+            Dim portsToTest =
+    GetSelectedPorts()
+
+            If portsToTest.Count = 0 Then
+                MessageHelper.ShowInfo(
+        "Select at least one port.")
+
+                Exit Sub
+
+            End If
+            Dim tasks =
+    portsToTest.Select(
+        Function(port)
+
+            Return TestPortAsync(
+                host,
+                port)
+
+        End Function)
+
+            Dim results =
+    Await Task.WhenAll(tasks)
+
+            BindPortResults(
+            results)
+            Dim openCount =
+    results.Count(
+        Function(r) r.IsOpen)
+
+            Dim closedCount =
+                results.Count(
+                    Function(r) Not r.IsOpen)
+
+            lblPortsOpen.Text =
+                $"Open: {openCount}"
+
+            lblPortsClosed.Text =
+                $"Closed: {closedCount}"
+        Finally
+
+            btnValidateCenterEdgePorts.Enabled = True
+
+        End Try
+
+    End Sub
+
+    Private Sub btnPortsSelectAll_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnPortsSelectAll.Click
+
+        For i As Integer = 0 To clbPorts.Items.Count - 1
+
+            clbPorts.SetItemChecked(
+                i,
+                True)
+
+        Next
+
+    End Sub
+    Private Sub btnPortsClearAll_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnPortsClearAll.Click
+
+        For i As Integer = 0 To clbPorts.Items.Count - 1
+
+            clbPorts.SetItemChecked(
+                i,
+                False)
+
+        Next
+
+    End Sub
+    Private Sub btnPortsCore_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnPortsCore.Click
+
+        btnPortsClearAll_Click(
+        Nothing,
+        EventArgs.Empty)
+
+        CheckPort(1433)
+        CheckPort(15050)
+        CheckPort(15051)
+        CheckPort(15059)
+
+    End Sub
+
+
+    Private Sub tpPortProcessMap_Enter(
+    sender As Object,
+    e As EventArgs) _
+    Handles tpPortProcessMap.Enter
+
+        LoadPortProcesses()
+
+    End Sub
+    Private Sub btnPortProcessRefresh_Click(
+    sender As Object,
+    e As EventArgs) Handles btnRefreshPortProcesses.Click
+
+        LoadPortProcesses()
+
+    End Sub
+    Private Sub chkCenterEdgePortsOnly_CheckedChanged(
+    sender As Object,
+    e As EventArgs) _
+    Handles chkCenterEdgePortsOnly.CheckedChanged
+
+        LoadPortProcesses()
 
     End Sub
 

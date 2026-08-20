@@ -60,6 +60,33 @@ Partial Class FormMain
         gbTechAssistOptions = New GroupBox()
         tbWindowTitle = New TextBox()
         lblWindowTitle = New Label()
+        tpNetworkDiagnostics = New TabPage()
+        tcNetworkDiagnostics = New TabControl()
+        tpPing = New TabPage()
+        rtbPingResults = New RichTextBox()
+        btnPing = New Button()
+        nudPingCount = New NumericUpDown()
+        lblPingCount = New Label()
+        tbPingHost = New TextBox()
+        lblPingHost = New Label()
+        tpTcpPortTest = New TabPage()
+        btnPortsCore = New Button()
+        btnPortsClearAll = New Button()
+        btnPortsSelectAll = New Button()
+        clbPorts = New CheckedListBox()
+        lblPortsClosed = New Label()
+        lblPortsOpen = New Label()
+        btnValidateCenterEdgePorts = New Button()
+        dgvPortValidation = New DataGridView()
+        cbPortPresets = New ComboBox()
+        rtbTcpResults = New RichTextBox()
+        btnTcpTest = New Button()
+        nudTcpPort = New NumericUpDown()
+        tbTcpHost = New TextBox()
+        tpPortProcessMap = New TabPage()
+        dgvPortProcesses = New DataGridView()
+        btnRefreshPortProcesses = New Button()
+        chkCenterEdgePortsOnly = New CheckBox()
         tlpFormMain = New TableLayoutPanel()
         flpFormButtonsBottom = New FlowLayoutPanel()
         btnAdminUnlock = New Button()
@@ -82,6 +109,7 @@ Partial Class FormMain
         btnServices = New Button()
         btnEventViewer = New Button()
         btnAppWiz = New Button()
+        btnDevices = New Button()
         scFormMainTopRight = New SplitContainer()
         flpFormButtonsTop = New FlowLayoutPanel()
         rtbHints = New RichTextBox()
@@ -89,7 +117,6 @@ Partial Class FormMain
         ttAdvantageButtons = New ToolTip(components)
         ttUtilityButtons = New ToolTip(components)
         tmrServices = New Timer(components)
-        btnDevices = New Button()
         tcFormMain.SuspendLayout()
         tpSystemInfo.SuspendLayout()
         CType(dgvSystemInfo, ComponentModel.ISupportInitialize).BeginInit()
@@ -114,6 +141,15 @@ Partial Class FormMain
         CType(dgvServices, ComponentModel.ISupportInitialize).BeginInit()
         tpOptions.SuspendLayout()
         gbTechAssistOptions.SuspendLayout()
+        tpNetworkDiagnostics.SuspendLayout()
+        tcNetworkDiagnostics.SuspendLayout()
+        tpPing.SuspendLayout()
+        CType(nudPingCount, ComponentModel.ISupportInitialize).BeginInit()
+        tpTcpPortTest.SuspendLayout()
+        CType(dgvPortValidation, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nudTcpPort, ComponentModel.ISupportInitialize).BeginInit()
+        tpPortProcessMap.SuspendLayout()
+        CType(dgvPortProcesses, ComponentModel.ISupportInitialize).BeginInit()
         tlpFormMain.SuspendLayout()
         flpFormButtonsBottom.SuspendLayout()
         flpTest.SuspendLayout()
@@ -178,6 +214,7 @@ Partial Class FormMain
         tcFormMain.Controls.Add(tpDbAnalytics)
         tcFormMain.Controls.Add(tpServices)
         tcFormMain.Controls.Add(tpOptions)
+        tcFormMain.Controls.Add(tpNetworkDiagnostics)
         tcFormMain.Dock = DockStyle.Fill
         tcFormMain.Location = New Point(3, 3)
         tcFormMain.Name = "tcFormMain"
@@ -548,6 +585,287 @@ Partial Class FormMain
         lblWindowTitle.TabIndex = 0
         lblWindowTitle.Text = "Window Title:  "
         ' 
+        ' tpNetworkDiagnostics
+        ' 
+        tpNetworkDiagnostics.Controls.Add(tcNetworkDiagnostics)
+        tpNetworkDiagnostics.Location = New Point(4, 24)
+        tpNetworkDiagnostics.Name = "tpNetworkDiagnostics"
+        tpNetworkDiagnostics.Padding = New Padding(3)
+        tpNetworkDiagnostics.Size = New Size(799, 524)
+        tpNetworkDiagnostics.TabIndex = 5
+        tpNetworkDiagnostics.Text = "Network Diagnostics"
+        tpNetworkDiagnostics.UseVisualStyleBackColor = True
+        ' 
+        ' tcNetworkDiagnostics
+        ' 
+        tcNetworkDiagnostics.Controls.Add(tpPing)
+        tcNetworkDiagnostics.Controls.Add(tpTcpPortTest)
+        tcNetworkDiagnostics.Controls.Add(tpPortProcessMap)
+        tcNetworkDiagnostics.Dock = DockStyle.Fill
+        tcNetworkDiagnostics.Location = New Point(3, 3)
+        tcNetworkDiagnostics.Name = "tcNetworkDiagnostics"
+        tcNetworkDiagnostics.SelectedIndex = 0
+        tcNetworkDiagnostics.Size = New Size(793, 518)
+        tcNetworkDiagnostics.TabIndex = 0
+        ' 
+        ' tpPing
+        ' 
+        tpPing.Controls.Add(rtbPingResults)
+        tpPing.Controls.Add(btnPing)
+        tpPing.Controls.Add(nudPingCount)
+        tpPing.Controls.Add(lblPingCount)
+        tpPing.Controls.Add(tbPingHost)
+        tpPing.Controls.Add(lblPingHost)
+        tpPing.Location = New Point(4, 24)
+        tpPing.Name = "tpPing"
+        tpPing.Padding = New Padding(3)
+        tpPing.Size = New Size(785, 490)
+        tpPing.TabIndex = 0
+        tpPing.Text = "Ping"
+        tpPing.UseVisualStyleBackColor = True
+        ' 
+        ' rtbPingResults
+        ' 
+        rtbPingResults.Location = New Point(296, 124)
+        rtbPingResults.Name = "rtbPingResults"
+        rtbPingResults.ReadOnly = True
+        rtbPingResults.Size = New Size(278, 96)
+        rtbPingResults.TabIndex = 5
+        rtbPingResults.Text = ""
+        ' 
+        ' btnPing
+        ' 
+        btnPing.Location = New Point(135, 176)
+        btnPing.Name = "btnPing"
+        btnPing.Size = New Size(75, 23)
+        btnPing.TabIndex = 4
+        btnPing.Text = "Ping"
+        btnPing.UseVisualStyleBackColor = True
+        ' 
+        ' nudPingCount
+        ' 
+        nudPingCount.Location = New Point(84, 113)
+        nudPingCount.Maximum = New Decimal(New Integer() {20, 0, 0, 0})
+        nudPingCount.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        nudPingCount.Name = "nudPingCount"
+        nudPingCount.Size = New Size(120, 23)
+        nudPingCount.TabIndex = 3
+        nudPingCount.Value = New Decimal(New Integer() {4, 0, 0, 0})
+        ' 
+        ' lblPingCount
+        ' 
+        lblPingCount.AutoSize = True
+        lblPingCount.Location = New Point(22, 103)
+        lblPingCount.Name = "lblPingCount"
+        lblPingCount.Size = New Size(40, 15)
+        lblPingCount.TabIndex = 2
+        lblPingCount.Text = "Count"
+        ' 
+        ' tbPingHost
+        ' 
+        tbPingHost.Location = New Point(84, 55)
+        tbPingHost.Name = "tbPingHost"
+        tbPingHost.Size = New Size(100, 23)
+        tbPingHost.TabIndex = 1
+        tbPingHost.Text = "localhost"
+        ' 
+        ' lblPingHost
+        ' 
+        lblPingHost.AutoSize = True
+        lblPingHost.Location = New Point(28, 55)
+        lblPingHost.Name = "lblPingHost"
+        lblPingHost.Size = New Size(32, 15)
+        lblPingHost.TabIndex = 0
+        lblPingHost.Text = "Host"
+        ' 
+        ' tpTcpPortTest
+        ' 
+        tpTcpPortTest.Controls.Add(btnPortsCore)
+        tpTcpPortTest.Controls.Add(btnPortsClearAll)
+        tpTcpPortTest.Controls.Add(btnPortsSelectAll)
+        tpTcpPortTest.Controls.Add(clbPorts)
+        tpTcpPortTest.Controls.Add(lblPortsClosed)
+        tpTcpPortTest.Controls.Add(lblPortsOpen)
+        tpTcpPortTest.Controls.Add(btnValidateCenterEdgePorts)
+        tpTcpPortTest.Controls.Add(dgvPortValidation)
+        tpTcpPortTest.Controls.Add(cbPortPresets)
+        tpTcpPortTest.Controls.Add(rtbTcpResults)
+        tpTcpPortTest.Controls.Add(btnTcpTest)
+        tpTcpPortTest.Controls.Add(nudTcpPort)
+        tpTcpPortTest.Controls.Add(tbTcpHost)
+        tpTcpPortTest.Location = New Point(4, 24)
+        tpTcpPortTest.Name = "tpTcpPortTest"
+        tpTcpPortTest.Padding = New Padding(3)
+        tpTcpPortTest.Size = New Size(785, 490)
+        tpTcpPortTest.TabIndex = 1
+        tpTcpPortTest.Text = "Tcp"
+        tpTcpPortTest.UseVisualStyleBackColor = True
+        ' 
+        ' btnPortsCore
+        ' 
+        btnPortsCore.Location = New Point(610, 322)
+        btnPortsCore.Name = "btnPortsCore"
+        btnPortsCore.Size = New Size(75, 23)
+        btnPortsCore.TabIndex = 12
+        btnPortsCore.Text = "Core Ports"
+        btnPortsCore.UseVisualStyleBackColor = True
+        ' 
+        ' btnPortsClearAll
+        ' 
+        btnPortsClearAll.Location = New Point(605, 288)
+        btnPortsClearAll.Name = "btnPortsClearAll"
+        btnPortsClearAll.Size = New Size(75, 23)
+        btnPortsClearAll.TabIndex = 11
+        btnPortsClearAll.Text = "Clear All"
+        btnPortsClearAll.UseVisualStyleBackColor = True
+        ' 
+        ' btnPortsSelectAll
+        ' 
+        btnPortsSelectAll.Location = New Point(602, 253)
+        btnPortsSelectAll.Name = "btnPortsSelectAll"
+        btnPortsSelectAll.Size = New Size(75, 23)
+        btnPortsSelectAll.TabIndex = 10
+        btnPortsSelectAll.Text = "Select All"
+        btnPortsSelectAll.UseVisualStyleBackColor = True
+        ' 
+        ' clbPorts
+        ' 
+        clbPorts.CheckOnClick = True
+        clbPorts.FormattingEnabled = True
+        clbPorts.Location = New Point(223, 236)
+        clbPorts.Name = "clbPorts"
+        clbPorts.Size = New Size(306, 166)
+        clbPorts.TabIndex = 9
+        ' 
+        ' lblPortsClosed
+        ' 
+        lblPortsClosed.AutoSize = True
+        lblPortsClosed.Location = New Point(129, 461)
+        lblPortsClosed.Name = "lblPortsClosed"
+        lblPortsClosed.Size = New Size(41, 15)
+        lblPortsClosed.TabIndex = 8
+        lblPortsClosed.Text = "Label2"
+        ' 
+        ' lblPortsOpen
+        ' 
+        lblPortsOpen.AutoSize = True
+        lblPortsOpen.Location = New Point(120, 441)
+        lblPortsOpen.Name = "lblPortsOpen"
+        lblPortsOpen.Size = New Size(41, 15)
+        lblPortsOpen.TabIndex = 7
+        lblPortsOpen.Text = "Label1"
+        ' 
+        ' btnValidateCenterEdgePorts
+        ' 
+        btnValidateCenterEdgePorts.Location = New Point(642, 441)
+        btnValidateCenterEdgePorts.Name = "btnValidateCenterEdgePorts"
+        btnValidateCenterEdgePorts.Size = New Size(104, 23)
+        btnValidateCenterEdgePorts.TabIndex = 6
+        btnValidateCenterEdgePorts.Text = "CE Port Tests"
+        btnValidateCenterEdgePorts.UseVisualStyleBackColor = True
+        ' 
+        ' dgvPortValidation
+        ' 
+        dgvPortValidation.AllowUserToAddRows = False
+        dgvPortValidation.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgvPortValidation.Location = New Point(223, 3)
+        dgvPortValidation.Name = "dgvPortValidation"
+        dgvPortValidation.ReadOnly = True
+        dgvPortValidation.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        dgvPortValidation.Size = New Size(457, 227)
+        dgvPortValidation.TabIndex = 5
+        ' 
+        ' cbPortPresets
+        ' 
+        cbPortPresets.FormattingEnabled = True
+        cbPortPresets.Items.AddRange(New Object() {"SQL Server (1433)", "License Validation (15050)", "License File Request (15051)", "Fingerprint Service (15054)", "Signage Service (15055)", "Embed Interface (15056)", "LaunchDarkly (15057)", "Advantage API Service (15059)", "Stage/Web 2 (15060)", "Credit Cards (31420)", "Embed Shared Server (58008)", "NetEPay (9000)", "Mercury Gift Cards (9100)"})
+        cbPortPresets.Location = New Point(3, 64)
+        cbPortPresets.Name = "cbPortPresets"
+        cbPortPresets.Size = New Size(201, 23)
+        cbPortPresets.TabIndex = 4
+        ' 
+        ' rtbTcpResults
+        ' 
+        rtbTcpResults.Location = New Point(6, 93)
+        rtbTcpResults.Name = "rtbTcpResults"
+        rtbTcpResults.ReadOnly = True
+        rtbTcpResults.Size = New Size(190, 243)
+        rtbTcpResults.TabIndex = 3
+        rtbTcpResults.Text = ""
+        ' 
+        ' btnTcpTest
+        ' 
+        btnTcpTest.Location = New Point(138, 6)
+        btnTcpTest.Name = "btnTcpTest"
+        btnTcpTest.Size = New Size(75, 23)
+        btnTcpTest.TabIndex = 2
+        btnTcpTest.Text = "Test Port"
+        btnTcpTest.UseVisualStyleBackColor = True
+        ' 
+        ' nudTcpPort
+        ' 
+        nudTcpPort.Location = New Point(3, 35)
+        nudTcpPort.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
+        nudTcpPort.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        nudTcpPort.Name = "nudTcpPort"
+        nudTcpPort.Size = New Size(120, 23)
+        nudTcpPort.TabIndex = 1
+        nudTcpPort.Value = New Decimal(New Integer() {1433, 0, 0, 0})
+        ' 
+        ' tbTcpHost
+        ' 
+        tbTcpHost.Location = New Point(6, 6)
+        tbTcpHost.Name = "tbTcpHost"
+        tbTcpHost.Size = New Size(100, 23)
+        tbTcpHost.TabIndex = 0
+        tbTcpHost.Text = "localhost"
+        ' 
+        ' tpPortProcessMap
+        ' 
+        tpPortProcessMap.Controls.Add(dgvPortProcesses)
+        tpPortProcessMap.Controls.Add(btnRefreshPortProcesses)
+        tpPortProcessMap.Controls.Add(chkCenterEdgePortsOnly)
+        tpPortProcessMap.Location = New Point(4, 24)
+        tpPortProcessMap.Name = "tpPortProcessMap"
+        tpPortProcessMap.Padding = New Padding(3)
+        tpPortProcessMap.Size = New Size(785, 490)
+        tpPortProcessMap.TabIndex = 3
+        tpPortProcessMap.Text = "Port To Process Mapping"
+        tpPortProcessMap.UseVisualStyleBackColor = True
+        ' 
+        ' dgvPortProcesses
+        ' 
+        dgvPortProcesses.AllowUserToAddRows = False
+        dgvPortProcesses.AllowUserToDeleteRows = False
+        dgvPortProcesses.AllowUserToResizeRows = False
+        dgvPortProcesses.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+        dgvPortProcesses.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgvPortProcesses.Location = New Point(3, 10)
+        dgvPortProcesses.Name = "dgvPortProcesses"
+        dgvPortProcesses.Size = New Size(751, 375)
+        dgvPortProcesses.TabIndex = 1
+        ' 
+        ' btnRefreshPortProcesses
+        ' 
+        btnRefreshPortProcesses.Location = New Point(679, 461)
+        btnRefreshPortProcesses.Name = "btnRefreshPortProcesses"
+        btnRefreshPortProcesses.Size = New Size(75, 23)
+        btnRefreshPortProcesses.TabIndex = 0
+        btnRefreshPortProcesses.Text = "Refresh"
+        btnRefreshPortProcesses.UseVisualStyleBackColor = True
+        ' 
+        ' chkCenterEdgePortsOnly
+        ' 
+        chkCenterEdgePortsOnly.AutoSize = True
+        chkCenterEdgePortsOnly.Checked = True
+        chkCenterEdgePortsOnly.CheckState = CheckState.Checked
+        chkCenterEdgePortsOnly.Location = New Point(254, 436)
+        chkCenterEdgePortsOnly.Name = "chkCenterEdgePortsOnly"
+        chkCenterEdgePortsOnly.Size = New Size(217, 19)
+        chkCenterEdgePortsOnly.TabIndex = 2
+        chkCenterEdgePortsOnly.Text = "Show Known CenterEdge Ports Only"
+        chkCenterEdgePortsOnly.UseVisualStyleBackColor = True
+        ' 
         ' tlpFormMain
         ' 
         tlpFormMain.ColumnCount = 3
@@ -761,6 +1079,14 @@ Partial Class FormMain
         btnAppWiz.TabIndex = 18
         btnAppWiz.UseVisualStyleBackColor = True
         ' 
+        ' btnDevices
+        ' 
+        btnDevices.Location = New Point(243, 3)
+        btnDevices.Name = "btnDevices"
+        btnDevices.Size = New Size(42, 42)
+        btnDevices.TabIndex = 19
+        btnDevices.UseVisualStyleBackColor = True
+        ' 
         ' scFormMainTopRight
         ' 
         scFormMainTopRight.Dock = DockStyle.Fill
@@ -829,14 +1155,6 @@ Partial Class FormMain
         ' 
         tmrServices.Interval = 1000
         ' 
-        ' btnDevices
-        ' 
-        btnDevices.Location = New Point(243, 3)
-        btnDevices.Name = "btnDevices"
-        btnDevices.Size = New Size(42, 42)
-        btnDevices.TabIndex = 19
-        btnDevices.UseVisualStyleBackColor = True
-        ' 
         ' FormMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -873,6 +1191,18 @@ Partial Class FormMain
         tpOptions.ResumeLayout(False)
         gbTechAssistOptions.ResumeLayout(False)
         gbTechAssistOptions.PerformLayout()
+        tpNetworkDiagnostics.ResumeLayout(False)
+        tcNetworkDiagnostics.ResumeLayout(False)
+        tpPing.ResumeLayout(False)
+        tpPing.PerformLayout()
+        CType(nudPingCount, ComponentModel.ISupportInitialize).EndInit()
+        tpTcpPortTest.ResumeLayout(False)
+        tpTcpPortTest.PerformLayout()
+        CType(dgvPortValidation, ComponentModel.ISupportInitialize).EndInit()
+        CType(nudTcpPort, ComponentModel.ISupportInitialize).EndInit()
+        tpPortProcessMap.ResumeLayout(False)
+        tpPortProcessMap.PerformLayout()
+        CType(dgvPortProcesses, ComponentModel.ISupportInitialize).EndInit()
         tlpFormMain.ResumeLayout(False)
         flpFormButtonsBottom.ResumeLayout(False)
         flpTest.ResumeLayout(False)
@@ -954,5 +1284,32 @@ Partial Class FormMain
     Friend WithEvents flpServicesButtons As FlowLayoutPanel
     Friend WithEvents btnAppWiz As Button
     Friend WithEvents btnDevices As Button
+    Friend WithEvents tpNetworkDiagnostics As TabPage
+    Friend WithEvents tcNetworkDiagnostics As TabControl
+    Friend WithEvents tpPing As TabPage
+    Friend WithEvents rtbPingResults As RichTextBox
+    Friend WithEvents btnPing As Button
+    Friend WithEvents nudPingCount As NumericUpDown
+    Friend WithEvents lblPingCount As Label
+    Friend WithEvents tbPingHost As TextBox
+    Friend WithEvents lblPingHost As Label
+    Friend WithEvents tpTcpPortTest As TabPage
+    Friend WithEvents rtbTcpResults As RichTextBox
+    Friend WithEvents btnTcpTest As Button
+    Friend WithEvents nudTcpPort As NumericUpDown
+    Friend WithEvents tbTcpHost As TextBox
+    Friend WithEvents cbPortPresets As ComboBox
+    Friend WithEvents dgvPortValidation As DataGridView
+    Friend WithEvents btnValidateCenterEdgePorts As Button
+    Friend WithEvents lblPortsOpen As Label
+    Friend WithEvents lblPortsClosed As Label
+    Friend WithEvents clbPorts As CheckedListBox
+    Friend WithEvents btnPortsClearAll As Button
+    Friend WithEvents btnPortsSelectAll As Button
+    Friend WithEvents btnPortsCore As Button
+    Friend WithEvents chkCenterEdgePortsOnly As CheckBox
+    Friend WithEvents tpPortProcessMap As TabPage
+    Friend WithEvents dgvPortProcesses As DataGridView
+    Friend WithEvents btnRefreshPortProcesses As Button
 
 End Class

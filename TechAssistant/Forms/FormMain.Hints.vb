@@ -50,7 +50,32 @@ Partial Public Class FormMain
             "• Use buttons to Start, Stop, or Restart the services." & Environment.NewLine &
             Environment.NewLine &
             "• Only available when running as an administrator."
-
+        _hints(tpNetworkDiagnostics.Name) =
+                "Network Diagnostics" &
+                Environment.NewLine &
+                Environment.NewLine &
+                "• Verify basic network connectivity using Ping." &
+                Environment.NewLine &
+                "• Verify services are accepting connections using TCP Port Test." &
+                Environment.NewLine &
+                Environment.NewLine &
+                "Common CenterEdge Ports:" &
+                Environment.NewLine &
+                "• SQL Server: 1433" &
+                Environment.NewLine &
+                "• License Validation: 15050" &
+                Environment.NewLine &
+                "• Advantage API: 15059" &
+                Environment.NewLine &
+                "• Credit Cards: 31420"
+        _hints(tpPortProcessMap.Name) =
+         AddGridTips(
+            "Port Processes" &
+            Environment.NewLine &
+            Environment.NewLine &
+            "• Displays information about processes using specific ports." &
+            Environment.NewLine &
+            "• Useful for identifying which applications are using certain ports.")
     End Sub
     Private Function AddGridTips(
         text As String) As String
