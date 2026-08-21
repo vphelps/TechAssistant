@@ -117,6 +117,12 @@ Partial Class FormMain
         ttAdvantageButtons = New ToolTip(components)
         ttUtilityButtons = New ToolTip(components)
         tmrServices = New Timer(components)
+        tpHttpValidation = New TabPage()
+        tbHttpUrl = New TextBox()
+        lblHttpUrl = New Label()
+        btnHttpTest = New Button()
+        rtbHttpResults = New RichTextBox()
+        chkShowResponseHeaders = New CheckBox()
         tcFormMain.SuspendLayout()
         tpSystemInfo.SuspendLayout()
         CType(dgvSystemInfo, ComponentModel.ISupportInitialize).BeginInit()
@@ -160,6 +166,7 @@ Partial Class FormMain
         scFormMainTopRight.Panel2.SuspendLayout()
         scFormMainTopRight.SuspendLayout()
         flpFormButtonsTop.SuspendLayout()
+        tpHttpValidation.SuspendLayout()
         SuspendLayout()
         ' 
         ' btnTestConnection
@@ -601,6 +608,7 @@ Partial Class FormMain
         tcNetworkDiagnostics.Controls.Add(tpPing)
         tcNetworkDiagnostics.Controls.Add(tpTcpPortTest)
         tcNetworkDiagnostics.Controls.Add(tpPortProcessMap)
+        tcNetworkDiagnostics.Controls.Add(tpHttpValidation)
         tcNetworkDiagnostics.Dock = DockStyle.Fill
         tcNetworkDiagnostics.Location = New Point(3, 3)
         tcNetworkDiagnostics.Name = "tcNetworkDiagnostics"
@@ -1155,6 +1163,69 @@ Partial Class FormMain
         ' 
         tmrServices.Interval = 1000
         ' 
+        ' tpHttpValidation
+        ' 
+        tpHttpValidation.Controls.Add(chkShowResponseHeaders)
+        tpHttpValidation.Controls.Add(rtbHttpResults)
+        tpHttpValidation.Controls.Add(btnHttpTest)
+        tpHttpValidation.Controls.Add(lblHttpUrl)
+        tpHttpValidation.Controls.Add(tbHttpUrl)
+        tpHttpValidation.Location = New Point(4, 24)
+        tpHttpValidation.Name = "tpHttpValidation"
+        tpHttpValidation.Padding = New Padding(3)
+        tpHttpValidation.Size = New Size(785, 490)
+        tpHttpValidation.TabIndex = 4
+        tpHttpValidation.Text = "HTTP / HTTPS Validation"
+        tpHttpValidation.UseVisualStyleBackColor = True
+        ' 
+        ' tbHttpUrl
+        ' 
+        tbHttpUrl.Location = New Point(43, 25)
+        tbHttpUrl.Name = "tbHttpUrl"
+        tbHttpUrl.Size = New Size(362, 23)
+        tbHttpUrl.TabIndex = 0
+        tbHttpUrl.Text = "relay-us-east-1.centeredgeonline.com"
+        ' 
+        ' lblHttpUrl
+        ' 
+        lblHttpUrl.AutoSize = True
+        lblHttpUrl.Location = New Point(6, 28)
+        lblHttpUrl.Name = "lblHttpUrl"
+        lblHttpUrl.Size = New Size(31, 15)
+        lblHttpUrl.TabIndex = 1
+        lblHttpUrl.Text = "URL:"
+        ' 
+        ' btnHttpTest
+        ' 
+        btnHttpTest.Location = New Point(527, 42)
+        btnHttpTest.Name = "btnHttpTest"
+        btnHttpTest.Size = New Size(75, 23)
+        btnHttpTest.TabIndex = 2
+        btnHttpTest.Text = "Test URL"
+        btnHttpTest.UseVisualStyleBackColor = True
+        ' 
+        ' rtbHttpResults
+        ' 
+        rtbHttpResults.Location = New Point(35, 88)
+        rtbHttpResults.Name = "rtbHttpResults"
+        rtbHttpResults.ReadOnly = True
+        rtbHttpResults.Size = New Size(530, 281)
+        rtbHttpResults.TabIndex = 3
+        rtbHttpResults.Text = ""
+        rtbHttpResults.WordWrap = False
+        ' 
+        ' chkShowResponseHeaders
+        ' 
+        chkShowResponseHeaders.AutoSize = True
+        chkShowResponseHeaders.Checked = True
+        chkShowResponseHeaders.CheckState = CheckState.Checked
+        chkShowResponseHeaders.Location = New Point(387, 446)
+        chkShowResponseHeaders.Name = "chkShowResponseHeaders"
+        chkShowResponseHeaders.Size = New Size(154, 19)
+        chkShowResponseHeaders.TabIndex = 4
+        chkShowResponseHeaders.Text = "Show Response Headers"
+        chkShowResponseHeaders.UseVisualStyleBackColor = True
+        ' 
         ' FormMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -1214,6 +1285,8 @@ Partial Class FormMain
         CType(scFormMainTopRight, ComponentModel.ISupportInitialize).EndInit()
         scFormMainTopRight.ResumeLayout(False)
         flpFormButtonsTop.ResumeLayout(False)
+        tpHttpValidation.ResumeLayout(False)
+        tpHttpValidation.PerformLayout()
         ResumeLayout(False)
     End Sub
 
@@ -1311,5 +1384,11 @@ Partial Class FormMain
     Friend WithEvents tpPortProcessMap As TabPage
     Friend WithEvents dgvPortProcesses As DataGridView
     Friend WithEvents btnRefreshPortProcesses As Button
+    Friend WithEvents tpHttpValidation As TabPage
+    Friend WithEvents btnHttpTest As Button
+    Friend WithEvents lblHttpUrl As Label
+    Friend WithEvents tbHttpUrl As TextBox
+    Friend WithEvents chkShowResponseHeaders As CheckBox
+    Friend WithEvents rtbHttpResults As RichTextBox
 
 End Class

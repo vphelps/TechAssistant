@@ -684,4 +684,12 @@ Public Class FormMain
 
     End Sub
 
+    Private Async Sub btnHttpTest_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnHttpTest.Click
+
+        Await TestHttpUrl()
+
+    End Sub
 End Class
