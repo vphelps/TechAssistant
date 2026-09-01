@@ -54,13 +54,17 @@ Public Class UpgradeCheckModel
         Dim warningThreshold As Decimal = If(settings IsNot Nothing, settings.DbSizeWarningThresholdGB, 4D)
         Dim criticalThreshold As Decimal = If(settings IsNot Nothing, settings.DbSizeCriticalThresholdGB, 10D)
 
+        ' Format thresholds using '0.##' to cleanly display decimals (e.g., 4.5) while dropping unnecessary zeroes (e.g., 4)
+        Dim warningStr As String = warningThreshold.ToString("0.##")
+        Dim criticalStr As String = criticalThreshold.ToString("0.##")
+
         Select Case GetRiskLevel(settings)
             Case RiskLevel.High
-                Return $"High Risk (> {criticalThreshold:N0} GB): Escalate to Advanced Support Tech & Development"
+                Return $"High Risk (> {criticalStr} GB): Escalate to Advanced Support Tech & Development"
             Case RiskLevel.RequiresReview
-                Return $"Requires Review ({warningThreshold:N0}–{criticalThreshold:N0} GB): Escalate to Advanced Support Tech"
+                Return $"Requires Review ({warningStr}–{criticalStr} GB): Escalate to Advanced Support Tech"
             Case RiskLevel.Low
-                Return $"Low Risk (< {warningThreshold:N0} GB): Ready for scheduling"
+                Return $"Low Risk (< {warningStr} GB): Ready for scheduling"
             Case Else
                 Return "Unable to retrieve database size."
         End Select

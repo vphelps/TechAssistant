@@ -55,7 +55,7 @@ Public Class FormMain
         GridContextMenuHelper.Attach(dgvPortProcesses)
 
         InitializeIcons()
-        InitializeHints()
+        InitializeHints(_cloudSettings)
         InitializeUtilityButtons()
         UpdateHelpText()
         LoadPortDefinitions()

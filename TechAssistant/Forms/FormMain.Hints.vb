@@ -4,7 +4,7 @@ Partial Public Class FormMain
 
     Private ReadOnly _hints As New Dictionary(Of String, String)
 
-    Private Sub InitializeHints()
+    Private Sub InitializeHints(Optional settings As CloudAppSettings = Nothing)
 
         _hints(tpSystemInfo.Name) =
         AddGridTips(
@@ -77,16 +77,20 @@ Partial Public Class FormMain
             Environment.NewLine &
             "• Useful for identifying which applications are using certain ports.")
 
+        ' Extract thresholds safely with fallbacks (4 and 10)
+        Dim warnStr As String = If(settings IsNot Nothing, settings.DbSizeWarningThresholdGB, 4D).ToString("0.##")
+        Dim critStr As String = If(settings IsNot Nothing, settings.DbSizeCriticalThresholdGB, 10D).ToString("0.##")
+
         _hints(tpUpgradeCheck.Name) =
             "Upgrade Health Check" &
-        Environment.NewLine &
-        Environment.NewLine &
-        "Phase 1 Health Check Risk Assessment:" & Environment.NewLine &
-                Environment.NewLine &
-                Environment.NewLine &
-                "• Low Risk (< 4 GB): Ready for scheduling." & Environment.NewLine & Environment.NewLine &
-                "• Requires Review (4–10 GB): Escalate to Advanced Support Tech." & Environment.NewLine & Environment.NewLine &
-                "• High Risk (> 10 GB): Approaching or exceeds SQL Express 10 GB data limit; escalate to Dev."
+            Environment.NewLine &
+            Environment.NewLine &
+            "Phase 1 Health Check Risk Assessment:" & Environment.NewLine &
+            Environment.NewLine &
+            Environment.NewLine &
+            $"• Low Risk (< {warnStr} GB): Ready for scheduling." & Environment.NewLine & Environment.NewLine &
+            $"• Requires Review ({warnStr}–{critStr} GB): Escalate to Advanced Support Tech." & Environment.NewLine & Environment.NewLine &
+            $"• High Risk (> {critStr} GB): Approaching or exceeds SQL Express {critStr} GB data limit; escalate to Dev."
     End Sub
     Private Function AddGridTips(
         text As String) As String
