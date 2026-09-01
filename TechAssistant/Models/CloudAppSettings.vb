@@ -37,7 +37,10 @@ Public Class CloudAppSettings
     ''' </summary>
     Public Shared Async Function FetchLatestAsync() As Task(Of CloudAppSettings)
         ' Points to root settings.json on master with cache-busting timestamp
-        Dim rawSettingsUrl As String = $"https://raw.githubusercontent.com/vphelps/TechAssistant/master/settings.json?t={DateTime.UtcNow.Ticks}"
+        'Dim rawSettingsUrl As String = $"https://raw.githubusercontent.com/vphelps/TechAssistant/master/settings.json?t={DateTime.UtcNow.Ticks}"
+        Dim rawSettingsUrl As String = $"https://gist.githubusercontent.com/vphelps/2fc6bc31169be06b39c4f4c94f9bac71/raw/settings.json?t={DateTime.UtcNow.Ticks}"
+
+
 
         Try
             Using client As New HttpClient()

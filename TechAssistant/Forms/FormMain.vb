@@ -38,11 +38,8 @@ Public Class FormMain
 
     End Sub
 
-    Private Async Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim strTemp As String = Nothing
-        ' 1. Fetch cloud configuration at startup (not saved to disk)
-        _cloudSettings = Await CloudAppSettings.FetchLatestAsync()
-
 
         ApplicationState.RunningAsAdmin = SecurityHelper.IsRunningElevated()
 
@@ -55,7 +52,7 @@ Public Class FormMain
         GridContextMenuHelper.Attach(dgvPortProcesses)
 
         InitializeIcons()
-        InitializeHints(_cloudSettings)
+        InitializeHints()
         InitializeUtilityButtons()
         UpdateHelpText()
         LoadPortDefinitions()
@@ -324,7 +321,6 @@ Public Class FormMain
         Else
             tmrServices.Stop()
         End If
-        If tcFormMain.SelectedTab Is tpUpgradeCheck Then LoadUpgradeCheckData()
 
 
 
@@ -762,5 +758,34 @@ Public Class FormMain
 
     End Sub
 
+    Private Async Sub btnUpgradeCheck_Click(sender As Object, e As EventArgs) Handles btnUpgradeCheck.Click
+        Try
+            ' 1. Give visual feedback while fetching online settings & database stats
+            btnUpgradeCheck.Enabled = False
+            Me.Cursor = Cursors.WaitCursor
 
+            ' 2. Always force a fresh fetch from the cloud on every click
+            _cloudSettings = Await CloudAppSettings.FetchLatestAsync()
+
+            ' 3. Re-initialize hints/tooltips to immediately reflect newly fetched cloud thresholds
+            InitializeHints(_cloudSettings)
+            UpdateHelpText()
+
+            ' 4. Force a fresh database query (bypass any cached _upgradeModel instance)
+            _upgradeModel = UpgradeCheckModel.LoadFromSystem()
+
+            ' 5. Update UI with the new model metrics and fresh cloud risk thresholds
+            DisplayUpgradeCheckInfo(_upgradeModel)
+
+        Catch ex As Exception
+            MessageBox.Show($"Error running upgrade check:{Environment.NewLine}{ex.Message}",
+                        "Upgrade Check Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error)
+        Finally
+            ' Restore button state and cursor
+            btnUpgradeCheck.Enabled = True
+            Me.Cursor = Cursors.Default
+        End Try
+    End Sub
 End Class

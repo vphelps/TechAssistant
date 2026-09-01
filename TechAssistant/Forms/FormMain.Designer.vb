@@ -94,6 +94,7 @@ Partial Class FormMain
         lblHttpUrl = New Label()
         tbHttpUrl = New TextBox()
         tpUpgradeCheck = New TabPage()
+        btnUpgradeCheck = New Button()
         tlpUpgradeCheck = New TableLayoutPanel()
         lblLocation = New Label()
         tbRiskLevel = New TextBox()
@@ -954,6 +955,7 @@ Partial Class FormMain
         ' 
         ' tpUpgradeCheck
         ' 
+        tpUpgradeCheck.Controls.Add(btnUpgradeCheck)
         tpUpgradeCheck.Controls.Add(tlpUpgradeCheck)
         tpUpgradeCheck.Location = New Point(4, 24)
         tpUpgradeCheck.Name = "tpUpgradeCheck"
@@ -962,6 +964,15 @@ Partial Class FormMain
         tpUpgradeCheck.TabIndex = 6
         tpUpgradeCheck.Text = "Upgrade Check"
         tpUpgradeCheck.UseVisualStyleBackColor = True
+        ' 
+        ' btnUpgradeCheck
+        ' 
+        btnUpgradeCheck.Location = New Point(636, 452)
+        btnUpgradeCheck.Name = "btnUpgradeCheck"
+        btnUpgradeCheck.Size = New Size(102, 23)
+        btnUpgradeCheck.TabIndex = 11
+        btnUpgradeCheck.Text = "Update Check"
+        btnUpgradeCheck.UseVisualStyleBackColor = True
         ' 
         ' tlpUpgradeCheck
         ' 
@@ -1554,5 +1565,6 @@ Partial Class FormMain
     Friend WithEvents lblRiskLevel As Label
     Friend WithEvents tbRiskLevel As TextBox
     Friend WithEvents tlpUpgradeCheck As TableLayoutPanel
+    Friend WithEvents btnUpgradeCheck As Button
 
 End Class

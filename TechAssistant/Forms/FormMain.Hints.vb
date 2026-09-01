@@ -5,6 +5,7 @@ Partial Public Class FormMain
     Private ReadOnly _hints As New Dictionary(Of String, String)
 
     Private Sub InitializeHints(Optional settings As CloudAppSettings = Nothing)
+        Dim strTemp As String = Nothing
 
         _hints(tpSystemInfo.Name) =
         AddGridTips(
@@ -80,8 +81,14 @@ Partial Public Class FormMain
         ' Extract thresholds safely with fallbacks (4 and 10)
         Dim warnStr As String = If(settings IsNot Nothing, settings.DbSizeWarningThresholdGB, 4D).ToString("0.##")
         Dim critStr As String = If(settings IsNot Nothing, settings.DbSizeCriticalThresholdGB, 10D).ToString("0.##")
-
-        _hints(tpUpgradeCheck.Name) =
+        If _cloudSettings Is Nothing Then
+            strTemp =
+            "Upgrade Health Check" &
+            Environment.NewLine &
+            Environment.NewLine &
+            "Click Update Check button to load data"
+        Else
+            strTemp =
             "Upgrade Health Check" &
             Environment.NewLine &
             Environment.NewLine &
@@ -91,6 +98,10 @@ Partial Public Class FormMain
             $"• Low Risk (< {warnStr} GB): Ready for scheduling." & Environment.NewLine & Environment.NewLine &
             $"• Requires Review ({warnStr}–{critStr} GB): Escalate to Advanced Support Tech." & Environment.NewLine & Environment.NewLine &
             $"• High Risk (> {critStr} GB): Approaching or exceeds SQL Express {critStr} GB data limit; escalate to Dev."
+        End If
+
+        _hints(tpUpgradeCheck.Name) = strTemp
+
     End Sub
     Private Function AddGridTips(
         text As String) As String
