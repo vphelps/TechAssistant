@@ -978,7 +978,7 @@ Partial Class FormMain
         tlpUpgradeCheck.Controls.Add(tbSqlVersion, 1, 1)
         tlpUpgradeCheck.Controls.Add(lblOsVersion, 0, 2)
         tlpUpgradeCheck.Controls.Add(lblDatabaseSize, 0, 3)
-        tlpUpgradeCheck.Location = New Point(22, 186)
+        tlpUpgradeCheck.Location = New Point(6, 6)
         tlpUpgradeCheck.Name = "tlpUpgradeCheck"
         tlpUpgradeCheck.RowCount = 6
         tlpUpgradeCheck.RowStyles.Add(New RowStyle(SizeType.Absolute, 30F))

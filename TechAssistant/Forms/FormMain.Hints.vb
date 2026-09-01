@@ -76,6 +76,17 @@ Partial Public Class FormMain
             "• Displays information about processes using specific ports." &
             Environment.NewLine &
             "• Useful for identifying which applications are using certain ports.")
+
+        _hints(tpUpgradeCheck.Name) =
+            "Upgrade Health Check" &
+        Environment.NewLine &
+        Environment.NewLine &
+        "Phase 1 Health Check Risk Assessment:" & Environment.NewLine &
+                Environment.NewLine &
+                Environment.NewLine &
+                "• Low Risk (< 4 GB): Ready for scheduling." & Environment.NewLine & Environment.NewLine &
+                "• Requires Review (4–10 GB): Escalate to Advanced Support Tech." & Environment.NewLine & Environment.NewLine &
+                "• High Risk (> 10 GB): Approaching or exceeds SQL Express 10 GB data limit; escalate to Dev."
     End Sub
     Private Function AddGridTips(
         text As String) As String
