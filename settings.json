@@ -1,6 +1,6 @@
 ﻿{
   "DbSizeWarningThresholdGB": 0.3,
-  "DbSizeCriticalThresholdGB": 0.4,
+  "DbSizeCriticalThresholdGB": 5.0,
   "ColorLowRiskHex": "#90EE90",
   "ColorWarningRiskHex": "#FFFACD",
   "ColorCriticalRiskHex": "#FFB6C1",
