@@ -12,6 +12,7 @@ Public Class FormMain
     Private _currentServiceIndex As Integer
     Private _totalServiceOperations As Integer
     Private _upgradeModel As UpgradeCheckModel = Nothing
+    Private _cloudSettings As CloudAppSettings
 
     Private Sub UpdateHelpText()
 
@@ -37,8 +38,11 @@ Public Class FormMain
 
     End Sub
 
-    Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim strTemp As String = Nothing
+        ' 1. Fetch cloud configuration at startup (not saved to disk)
+        _cloudSettings = Await CloudAppSettings.FetchLatestAsync()
+
 
         ApplicationState.RunningAsAdmin = SecurityHelper.IsRunningElevated()
 
@@ -239,7 +243,7 @@ Public Class FormMain
     End Sub
 
     ''' <summary>
-    ''' Updates UI elements on tpUpgradeCheck using the model data.
+    ''' Updates UI elements on tpUpgradeCheck using the model data and cloud settings.
     ''' </summary>
     Private Sub DisplayUpgradeCheckInfo(model As UpgradeCheckModel)
         ' 1. Basic Info
@@ -254,14 +258,18 @@ Public Class FormMain
             tbDatabaseSize.Text = "Unknown"
         End If
 
-        ' 3. Risk Level Info
-        tbRiskLevel.Text = model.RiskLevelDescription
-        tbRiskLevel.ForeColor = model.RiskForeColor
-        tbRiskLevel.BackColor = model.RiskBackColor
+        ' 3. Dynamic Risk Level Info driven by Cloud Settings
+        ' (_cloudSettings is the form-level instance loaded during FormMain_Load)
+        tbRiskLevel.Text = model.GetRiskDescription(_cloudSettings)
+        tbRiskLevel.ForeColor = model.GetRiskForeColor(_cloudSettings)
+        tbRiskLevel.BackColor = model.GetRiskBackColor(_cloudSettings)
+
+        ' Optional: Also apply the risk background color directly to the DB size field for visual emphasis
+        tbDatabaseSize.BackColor = model.GetRiskBackColor(_cloudSettings)
 
         ' 4. Safe Table & Combined Size Calculations
         If model.LargestTableSizeKB.HasValue AndAlso model.DatabaseSizeGB.HasValue Then
-            ' Extract values safely using .Value or .GetValueOrDefault()
+            ' Extract values safely using .Value
             Dim tableSizeKB As Decimal = model.LargestTableSizeKB.Value
             Dim tableSizeGB As Decimal = tableSizeKB / 1048576D
             Dim dbSizeGB As Decimal = model.DatabaseSizeGB.Value
@@ -275,6 +283,7 @@ Public Class FormMain
             tbTest1.Text = "Unable to calculate total size (Database or Table size missing)."
         End If
     End Sub
+
     Private Sub btnTest1_Click(sender As Object, e As EventArgs) Handles btnTest1.Click
 
     End Sub

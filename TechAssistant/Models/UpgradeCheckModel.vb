@@ -25,71 +25,78 @@ Public Class UpgradeCheckModel
         End Get
     End Property
 
-    ' Strongly-typed Risk Level Enum property
-    Public ReadOnly Property CurrentRiskLevel As RiskLevel
-        Get
-            If Not DatabaseSizeGB.HasValue Then
-                Return RiskLevel.Unknown
-            End If
+    ''' <summary>
+    ''' Evaluates the strongly-typed RiskLevel dynamically based on cloud CloudAppSettings thresholds.
+    ''' </summary>
+    Public Function GetRiskLevel(settings As CloudAppSettings) As RiskLevel
+        If Not DatabaseSizeGB.HasValue Then
+            Return RiskLevel.Unknown
+        End If
 
-            Select Case DatabaseSizeGB.Value
-                Case >= 10D
-                    Return RiskLevel.High
-                Case >= 4D
-                    Return RiskLevel.RequiresReview
-                Case Else
-                    Return RiskLevel.Low
-            End Select
-        End Get
-    End Property
+        ' Default to standard fallback thresholds if settings fails to pass
+        Dim warningThreshold As Decimal = If(settings IsNot Nothing, settings.DbSizeWarningThresholdGB, 4D)
+        Dim criticalThreshold As Decimal = If(settings IsNot Nothing, settings.DbSizeCriticalThresholdGB, 10D)
 
-    ' Calculated Risk Level Description driven by CurrentRiskLevel
-    Public ReadOnly Property RiskLevelDescription As String
-        Get
-            Select Case CurrentRiskLevel
-                Case RiskLevel.High
-                    Return "High Risk (> 10 GB): Escalate to Advanced Support Tech & Development"
-                Case RiskLevel.RequiresReview
-                    Return "Requires Review (4–10 GB): Escalate to Advanced Support Tech"
-                Case RiskLevel.Low
-                    Return "Low Risk (< 4 GB): Ready for scheduling"
-                Case Else
-                    Return "Unable to retrieve database size."
-            End Select
-        End Get
-    End Property
+        Select Case DatabaseSizeGB.Value
+            Case >= criticalThreshold
+                Return RiskLevel.High
+            Case >= warningThreshold
+                Return RiskLevel.RequiresReview
+            Case Else
+                Return RiskLevel.Low
+        End Select
+    End Function
 
-    ' Background color for UI indicators/labels based on risk tier
-    Public ReadOnly Property RiskBackColor As Color
-        Get
-            Select Case CurrentRiskLevel
-                Case RiskLevel.High
-                    Return Color.MistyRose            ' Soft red highlight
-                Case RiskLevel.RequiresReview
-                    Return Color.LightGoldenrodYellow ' Soft yellow highlight
-                Case RiskLevel.Low
-                    Return Color.LightGreen           ' Soft green highlight
-                Case Else
-                    Return Color.LightGray            ' Default neutral highlight
-            End Select
-        End Get
-    End Property
+    ''' <summary>
+    ''' Returns the formatted risk level description driven by cloud AppSettings thresholds.
+    ''' </summary>
+    Public Function GetRiskDescription(settings As CloudAppSettings) As String
+        Dim warningThreshold As Decimal = If(settings IsNot Nothing, settings.DbSizeWarningThresholdGB, 4D)
+        Dim criticalThreshold As Decimal = If(settings IsNot Nothing, settings.DbSizeCriticalThresholdGB, 10D)
 
-    ' Foreground text color optimized for contrast against RiskBackColor
-    Public ReadOnly Property RiskForeColor As Color
-        Get
-            Select Case CurrentRiskLevel
-                Case RiskLevel.High
-                    Return Color.DarkRed
-                Case RiskLevel.RequiresReview
-                    Return Color.DarkGoldenrod
-                Case RiskLevel.Low
-                    Return Color.DarkGreen
-                Case Else
-                    Return Color.Black
-            End Select
-        End Get
-    End Property
+        Select Case GetRiskLevel(settings)
+            Case RiskLevel.High
+                Return $"High Risk (> {criticalThreshold:N0} GB): Escalate to Advanced Support Tech & Development"
+            Case RiskLevel.RequiresReview
+                Return $"Requires Review ({warningThreshold:N0}–{criticalThreshold:N0} GB): Escalate to Advanced Support Tech"
+            Case RiskLevel.Low
+                Return $"Low Risk (< {warningThreshold:N0} GB): Ready for scheduling"
+            Case Else
+                Return "Unable to retrieve database size."
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Returns the UI background color corresponding to the calculated risk level.
+    ''' </summary>
+    Public Function GetRiskBackColor(settings As CloudAppSettings) As Color
+        Select Case GetRiskLevel(settings)
+            Case RiskLevel.High
+                Return If(settings IsNot Nothing, settings.CriticalRiskBackColor, Color.MistyRose)
+            Case RiskLevel.RequiresReview
+                Return If(settings IsNot Nothing, settings.WarningRiskBackColor, Color.LightGoldenrodYellow)
+            Case RiskLevel.Low
+                Return If(settings IsNot Nothing, settings.LowRiskBackColor, Color.LightGreen)
+            Case Else
+                Return Color.LightGray
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Returns the UI text foreground color optimized for readability against RiskBackColor.
+    ''' </summary>
+    Public Function GetRiskForeColor(settings As CloudAppSettings) As Color
+        Select Case GetRiskLevel(settings)
+            Case RiskLevel.High
+                Return Color.DarkRed
+            Case RiskLevel.RequiresReview
+                Return Color.DarkGoldenrod
+            Case RiskLevel.Low
+                Return Color.DarkGreen
+            Case Else
+                Return Color.Black
+        End Select
+    End Function
 
     ''' <summary>
     ''' Fetches system information and database size, returning a populated model instance.
@@ -112,7 +119,6 @@ Public Class UpgradeCheckModel
 
             ' SQL Server Version
             Dim sqlVerResult As Object = DatabaseService.ExecuteScalar("SELECT LEFT(@@VERSION, CHARINDEX(' (', @@VERSION) - 1) + ' ' + CAST(SERVERPROPERTY('ProductLevel') AS VARCHAR) + ' ' + CAST(SERVERPROPERTY('Edition') AS VARCHAR)")
-            'Dim sqlVerResult As Object = DatabaseService.ExecuteScalar("SELECT @@VERSION")
             If sqlVerResult IsNot Nothing AndAlso Not Convert.IsDBNull(sqlVerResult) Then
                 model.SqlVersion = sqlVerResult.ToString()
             End If
@@ -125,17 +131,19 @@ Public Class UpgradeCheckModel
                 model.DatabaseSizeGB = Convert.ToDecimal(sizeResult)
             End If
 
+            ' Largest Table Size
             Dim tableSize As String = Queries.GetLargestDbTableSize
             Dim tableSizeResult As Object = DatabaseService.ExecuteScalar(tableSize)
             If tableSizeResult IsNot Nothing AndAlso Not Convert.IsDBNull(tableSizeResult) Then
                 model.LargestTableSizeKB = Convert.ToDecimal(tableSizeResult)
             End If
+
         Catch ex As Exception
             ' Temporarily pop up the actual SQL error message so you can see what failed in the EXE
             MessageBox.Show($"Database Connection Error: {ex.Message}{Environment.NewLine}{ex.StackTrace}",
-                    "Database Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error)
+                            "Database Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error)
 
             ' Default fallback values remain "Unknown" / Nothing
         End Try
