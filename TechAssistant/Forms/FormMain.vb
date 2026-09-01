@@ -33,8 +33,13 @@ Public Class FormMain
         End If
 
     End Sub
+    Private Sub RemoveFutureFeatures()
+
+    End Sub
+
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim strTemp As String = Nothing
+
         ApplicationState.RunningAsAdmin = SecurityHelper.IsRunningElevated()
 
         GridContextMenuHelper.Attach(dgvSystemInfo)
@@ -56,7 +61,18 @@ Public Class FormMain
 
         LoadServices()
         tcFormMain.SelectedTab = tpUpgradeCheck
+        Dim currentUser As String = Environment.UserName
+        If Not String.Equals(currentUser, "vphelps") Then
+            tcFormMain.TabPages.Remove(tpDbInfo)
+            tcFormMain.TabPages.Remove(tpServices)
+            tcFormMain.TabPages.Remove(tpDbAnalytics)
+            tcFormMain.TabPages.Remove(tpOptions)
+            flpTest.Visible = False
+            flpFormButtonsTop.Visible = False
+            flpAppButtons.Visible = False
+            btnAdminUnlock.Visible = False
 
+        End If
     End Sub
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
@@ -226,30 +242,38 @@ Public Class FormMain
     ''' Updates UI elements on tpUpgradeCheck using the model data.
     ''' </summary>
     Private Sub DisplayUpgradeCheckInfo(model As UpgradeCheckModel)
+        ' 1. Basic Info
         tbLocation.Text = model.LocationName
         tbSqlVersion.Text = model.SqlVersion
         tbOsVersion.Text = model.FullOsDisplay
 
+        ' 2. Safely handle DatabaseSizeGB
         If model.DatabaseSizeGB.HasValue Then
             tbDatabaseSize.Text = $"{model.DatabaseSizeGB.Value:N2} GB"
         Else
             tbDatabaseSize.Text = "Unknown"
         End If
 
+        ' 3. Risk Level Info
         tbRiskLevel.Text = model.RiskLevelDescription
         tbRiskLevel.ForeColor = model.RiskForeColor
         tbRiskLevel.BackColor = model.RiskBackColor
 
-        'Dim tableSizeKB As Decimal = 5242880D ' Example: 5,242,880 KB
-        'Dim tableSizeGB As Decimal = tableSizeKB / 1048576D ' Output: 5.0 GB
-        Dim tableSizeKB As Decimal = model.LargestTableSizeKB ' Example: 5,242,880 KB
-        Dim tableSizeGB As Decimal = tableSizeKB / 1048576D ' Output: 5.0 GB
-        Dim sizeAdded As Decimal = tableSizeGB + model.DatabaseSizeGB
-        Dim sizeRounded As Decimal = Math.Round(sizeAdded, 2)
+        ' 4. Safe Table & Combined Size Calculations
+        If model.LargestTableSizeKB.HasValue AndAlso model.DatabaseSizeGB.HasValue Then
+            ' Extract values safely using .Value or .GetValueOrDefault()
+            Dim tableSizeKB As Decimal = model.LargestTableSizeKB.Value
+            Dim tableSizeGB As Decimal = tableSizeKB / 1048576D
+            Dim dbSizeGB As Decimal = model.DatabaseSizeGB.Value
 
-        tbTest1.Text = model.LargestTableSizeKB
-        tbTest1.Text = $"DB size({model.DatabaseSizeGB}) plus largest table({tableSizeGB}) added = {sizeRounded} "
-        'tbTest1.Text = $"Kilobytes = {tableSizeKB}, Gigabytes = {tableSizeGB}"
+            Dim sizeAdded As Decimal = tableSizeGB + dbSizeGB
+            Dim sizeRounded As Decimal = Math.Round(sizeAdded, 2)
+
+            tbTest1.Text = $"DB size({dbSizeGB:N2} GB) plus largest table({tableSizeGB:N2} GB) added = {sizeRounded:N2} GB"
+        Else
+            ' Fallback text when either value fails to load from SQL
+            tbTest1.Text = "Unable to calculate total size (Database or Table size missing)."
+        End If
     End Sub
     Private Sub btnTest1_Click(sender As Object, e As EventArgs) Handles btnTest1.Click
 

@@ -131,7 +131,13 @@ Public Class UpgradeCheckModel
                 model.LargestTableSizeKB = Convert.ToDecimal(tableSizeResult)
             End If
         Catch ex As Exception
-            ' If database access fails, default values remain "Unknown" / Nothing
+            ' Temporarily pop up the actual SQL error message so you can see what failed in the EXE
+            MessageBox.Show($"Database Connection Error: {ex.Message}{Environment.NewLine}{ex.StackTrace}",
+                    "Database Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error)
+
+            ' Default fallback values remain "Unknown" / Nothing
         End Try
 
         Return model
