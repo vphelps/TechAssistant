@@ -3,6 +3,7 @@ Imports System.DirectoryServices.ActiveDirectory
 Imports System.Net.NetworkInformation
 Imports System.Net.Sockets
 Imports Microsoft.Data.SqlClient
+Imports System.Management
 
 Public Class FormMain
     Private _savedServiceSelections As New List(Of String)
@@ -10,6 +11,7 @@ Public Class FormMain
     Private _currentServiceOperation As String = String.Empty
     Private _currentServiceIndex As Integer
     Private _totalServiceOperations As Integer
+    Private _upgradeModel As UpgradeCheckModel = Nothing
 
     Private Sub UpdateHelpText()
 
@@ -53,6 +55,7 @@ Public Class FormMain
         InitialLoad()
 
         LoadServices()
+        tcFormMain.SelectedTab = tpUpgradeCheck
 
     End Sub
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -209,14 +212,51 @@ Public Class FormMain
 
     End Sub
 
+    Private Sub LoadUpgradeCheckData()
+        ' Fetch only if not already loaded (prevents unnecessary re-querying)
+        If _upgradeModel Is Nothing Then
+            _upgradeModel = UpgradeCheckModel.LoadFromSystem()
+        End If
+
+        ' Bind the cached model data to the UI
+        DisplayUpgradeCheckInfo(_upgradeModel)
+    End Sub
+
+    ''' <summary>
+    ''' Updates UI elements on tpUpgradeCheck using the model data.
+    ''' </summary>
+    Private Sub DisplayUpgradeCheckInfo(model As UpgradeCheckModel)
+        tbLocation.Text = model.LocationName
+        tbSqlVersion.Text = model.SqlVersion
+        tbOsVersion.Text = model.FullOsDisplay
+
+        If model.DatabaseSizeGB.HasValue Then
+            tbDatabaseSize.Text = $"{model.DatabaseSizeGB.Value:N2} GB"
+        Else
+            tbDatabaseSize.Text = "Unknown"
+        End If
+
+        tbRiskLevel.Text = model.RiskLevelDescription
+        tbRiskLevel.ForeColor = model.RiskForeColor
+        tbRiskLevel.BackColor = model.RiskBackColor
+
+        'Dim tableSizeKB As Decimal = 5242880D ' Example: 5,242,880 KB
+        'Dim tableSizeGB As Decimal = tableSizeKB / 1048576D ' Output: 5.0 GB
+        Dim tableSizeKB As Decimal = model.LargestTableSizeKB ' Example: 5,242,880 KB
+        Dim tableSizeGB As Decimal = tableSizeKB / 1048576D ' Output: 5.0 GB
+        Dim sizeAdded As Decimal = tableSizeGB + model.DatabaseSizeGB
+        Dim sizeRounded As Decimal = Math.Round(sizeAdded, 2)
+
+        tbTest1.Text = model.LargestTableSizeKB
+        tbTest1.Text = $"DB size({model.DatabaseSizeGB}) plus largest table({tableSizeGB}) added = {sizeRounded} "
+        'tbTest1.Text = $"Kilobytes = {tableSizeKB}, Gigabytes = {tableSizeGB}"
+    End Sub
     Private Sub btnTest1_Click(sender As Object, e As EventArgs) Handles btnTest1.Click
-        MessageHelper.ShowInfo(
-    "Database connection successful.")
+
     End Sub
 
     Private Sub btnTest2_Click(sender As Object, e As EventArgs) Handles btnTest2.Click
-        MessageHelper.ShowWarning(
-    "This operation may take several minutes.")
+
     End Sub
 
     Private Sub btnTest3_Click(sender As Object, e As EventArgs) Handles btnTest3.Click
@@ -247,16 +287,13 @@ Public Class FormMain
         UpdateHelpText()
 
         If tcFormMain.SelectedTab Is tpServices Then
-
             tmrServices.Start()
-
         Else
-
             tmrServices.Stop()
-
         End If
+        If tcFormMain.SelectedTab Is tpUpgradeCheck Then LoadUpgradeCheckData()
 
-        tbTest1.Text = tmrServices.Enabled.ToString
+
 
     End Sub
 
@@ -272,7 +309,6 @@ Public Class FormMain
         If Not System.IO.File.Exists(executable) Then
             Return
         End If
-        tbTest1.Text = executable
 
         Dim startinfo As ProcessStartInfo = New ProcessStartInfo(executable)
         startinfo.Arguments = ""
@@ -692,4 +728,6 @@ Public Class FormMain
         Await TestHttpUrl()
 
     End Sub
+
+
 End Class

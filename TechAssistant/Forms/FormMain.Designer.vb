@@ -87,6 +87,24 @@ Partial Class FormMain
         dgvPortProcesses = New DataGridView()
         btnRefreshPortProcesses = New Button()
         chkCenterEdgePortsOnly = New CheckBox()
+        tpHttpValidation = New TabPage()
+        chkShowResponseHeaders = New CheckBox()
+        rtbHttpResults = New RichTextBox()
+        btnHttpTest = New Button()
+        lblHttpUrl = New Label()
+        tbHttpUrl = New TextBox()
+        tpUpgradeCheck = New TabPage()
+        tlpUpgradeCheck = New TableLayoutPanel()
+        lblLocation = New Label()
+        tbRiskLevel = New TextBox()
+        tbLocation = New TextBox()
+        tbDatabaseSize = New TextBox()
+        lblRiskLevel = New Label()
+        tbOsVersion = New TextBox()
+        lblSqlVersion = New Label()
+        tbSqlVersion = New TextBox()
+        lblOsVersion = New Label()
+        lblDatabaseSize = New Label()
         tlpFormMain = New TableLayoutPanel()
         flpFormButtonsBottom = New FlowLayoutPanel()
         btnAdminUnlock = New Button()
@@ -117,12 +135,6 @@ Partial Class FormMain
         ttAdvantageButtons = New ToolTip(components)
         ttUtilityButtons = New ToolTip(components)
         tmrServices = New Timer(components)
-        tpHttpValidation = New TabPage()
-        tbHttpUrl = New TextBox()
-        lblHttpUrl = New Label()
-        btnHttpTest = New Button()
-        rtbHttpResults = New RichTextBox()
-        chkShowResponseHeaders = New CheckBox()
         tcFormMain.SuspendLayout()
         tpSystemInfo.SuspendLayout()
         CType(dgvSystemInfo, ComponentModel.ISupportInitialize).BeginInit()
@@ -156,6 +168,9 @@ Partial Class FormMain
         CType(nudTcpPort, ComponentModel.ISupportInitialize).BeginInit()
         tpPortProcessMap.SuspendLayout()
         CType(dgvPortProcesses, ComponentModel.ISupportInitialize).BeginInit()
+        tpHttpValidation.SuspendLayout()
+        tpUpgradeCheck.SuspendLayout()
+        tlpUpgradeCheck.SuspendLayout()
         tlpFormMain.SuspendLayout()
         flpFormButtonsBottom.SuspendLayout()
         flpTest.SuspendLayout()
@@ -166,7 +181,6 @@ Partial Class FormMain
         scFormMainTopRight.Panel2.SuspendLayout()
         scFormMainTopRight.SuspendLayout()
         flpFormButtonsTop.SuspendLayout()
-        tpHttpValidation.SuspendLayout()
         SuspendLayout()
         ' 
         ' btnTestConnection
@@ -198,7 +212,7 @@ Partial Class FormMain
         ' 
         ' btnTestUpdate
         ' 
-        btnTestUpdate.Location = New Point(3, 32)
+        btnTestUpdate.Location = New Point(131, 3)
         btnTestUpdate.Name = "btnTestUpdate"
         btnTestUpdate.Size = New Size(122, 23)
         btnTestUpdate.TabIndex = 4
@@ -207,7 +221,7 @@ Partial Class FormMain
         ' 
         ' btnTestConnect
         ' 
-        btnTestConnect.Location = New Point(3, 61)
+        btnTestConnect.Location = New Point(3, 32)
         btnTestConnect.Name = "btnTestConnect"
         btnTestConnect.Size = New Size(122, 23)
         btnTestConnect.TabIndex = 5
@@ -222,11 +236,12 @@ Partial Class FormMain
         tcFormMain.Controls.Add(tpServices)
         tcFormMain.Controls.Add(tpOptions)
         tcFormMain.Controls.Add(tpNetworkDiagnostics)
+        tcFormMain.Controls.Add(tpUpgradeCheck)
         tcFormMain.Dock = DockStyle.Fill
         tcFormMain.Location = New Point(3, 3)
         tcFormMain.Name = "tcFormMain"
         tcFormMain.SelectedIndex = 0
-        tcFormMain.Size = New Size(807, 552)
+        tcFormMain.Size = New Size(883, 548)
         tcFormMain.TabIndex = 6
         ' 
         ' tpSystemInfo
@@ -236,7 +251,7 @@ Partial Class FormMain
         tpSystemInfo.Location = New Point(4, 24)
         tpSystemInfo.Name = "tpSystemInfo"
         tpSystemInfo.Padding = New Padding(3)
-        tpSystemInfo.Size = New Size(799, 524)
+        tpSystemInfo.Size = New Size(875, 520)
         tpSystemInfo.TabIndex = 0
         tpSystemInfo.Text = "System Info"
         ' 
@@ -254,7 +269,7 @@ Partial Class FormMain
         dgvSystemInfo.ReadOnly = True
         dgvSystemInfo.RowHeadersVisible = False
         dgvSystemInfo.SelectionMode = DataGridViewSelectionMode.CellSelect
-        dgvSystemInfo.Size = New Size(793, 518)
+        dgvSystemInfo.Size = New Size(869, 514)
         dgvSystemInfo.TabIndex = 2
         ' 
         ' tpDbInfo
@@ -263,7 +278,7 @@ Partial Class FormMain
         tpDbInfo.Location = New Point(4, 24)
         tpDbInfo.Name = "tpDbInfo"
         tpDbInfo.Padding = New Padding(3)
-        tpDbInfo.Size = New Size(799, 524)
+        tpDbInfo.Size = New Size(875, 520)
         tpDbInfo.TabIndex = 1
         tpDbInfo.Text = "CE Db Info"
         ' 
@@ -277,7 +292,7 @@ Partial Class FormMain
         tcDbInfo.Multiline = True
         tcDbInfo.Name = "tcDbInfo"
         tcDbInfo.SelectedIndex = 0
-        tcDbInfo.Size = New Size(793, 518)
+        tcDbInfo.Size = New Size(869, 514)
         tcDbInfo.TabIndex = 1
         ' 
         ' tpApplicationInfo
@@ -287,7 +302,7 @@ Partial Class FormMain
         tpApplicationInfo.Location = New Point(4, 24)
         tpApplicationInfo.Name = "tpApplicationInfo"
         tpApplicationInfo.Padding = New Padding(3)
-        tpApplicationInfo.Size = New Size(785, 490)
+        tpApplicationInfo.Size = New Size(861, 486)
         tpApplicationInfo.TabIndex = 0
         tpApplicationInfo.Text = "ApplicationInfo"
         ' 
@@ -305,7 +320,7 @@ Partial Class FormMain
         dgvApplicationInfo.ReadOnly = True
         dgvApplicationInfo.RowHeadersVisible = False
         dgvApplicationInfo.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        dgvApplicationInfo.Size = New Size(779, 484)
+        dgvApplicationInfo.Size = New Size(855, 480)
         dgvApplicationInfo.TabIndex = 0
         ' 
         ' tpAppOptions
@@ -314,7 +329,7 @@ Partial Class FormMain
         tpAppOptions.Location = New Point(4, 24)
         tpAppOptions.Name = "tpAppOptions"
         tpAppOptions.Padding = New Padding(3)
-        tpAppOptions.Size = New Size(785, 490)
+        tpAppOptions.Size = New Size(861, 486)
         tpAppOptions.TabIndex = 1
         tpAppOptions.Text = "AppOptions"
         ' 
@@ -331,7 +346,7 @@ Partial Class FormMain
         dgvAppOptions.Name = "dgvAppOptions"
         dgvAppOptions.ReadOnly = True
         dgvAppOptions.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        dgvAppOptions.Size = New Size(779, 484)
+        dgvAppOptions.Size = New Size(855, 480)
         dgvAppOptions.TabIndex = 0
         ' 
         ' tpWebOptions
@@ -340,7 +355,7 @@ Partial Class FormMain
         tpWebOptions.Location = New Point(4, 24)
         tpWebOptions.Name = "tpWebOptions"
         tpWebOptions.Padding = New Padding(3)
-        tpWebOptions.Size = New Size(785, 490)
+        tpWebOptions.Size = New Size(861, 486)
         tpWebOptions.TabIndex = 2
         tpWebOptions.Text = "WebOptions"
         ' 
@@ -357,7 +372,7 @@ Partial Class FormMain
         dgvWebOptions.Name = "dgvWebOptions"
         dgvWebOptions.ReadOnly = True
         dgvWebOptions.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        dgvWebOptions.Size = New Size(779, 484)
+        dgvWebOptions.Size = New Size(855, 480)
         dgvWebOptions.TabIndex = 1
         ' 
         ' tpDbAnalytics
@@ -367,7 +382,7 @@ Partial Class FormMain
         tpDbAnalytics.Location = New Point(4, 24)
         tpDbAnalytics.Name = "tpDbAnalytics"
         tpDbAnalytics.Padding = New Padding(3)
-        tpDbAnalytics.Size = New Size(799, 524)
+        tpDbAnalytics.Size = New Size(875, 520)
         tpDbAnalytics.TabIndex = 2
         tpDbAnalytics.Text = "Database Analytics"
         ' 
@@ -379,7 +394,7 @@ Partial Class FormMain
         tcDbAnalytics.Location = New Point(3, 3)
         tcDbAnalytics.Name = "tcDbAnalytics"
         tcDbAnalytics.SelectedIndex = 0
-        tcDbAnalytics.Size = New Size(793, 518)
+        tcDbAnalytics.Size = New Size(869, 514)
         tcDbAnalytics.TabIndex = 0
         ' 
         ' tpDbTableSizes
@@ -388,7 +403,7 @@ Partial Class FormMain
         tpDbTableSizes.Location = New Point(4, 24)
         tpDbTableSizes.Name = "tpDbTableSizes"
         tpDbTableSizes.Padding = New Padding(3)
-        tpDbTableSizes.Size = New Size(785, 490)
+        tpDbTableSizes.Size = New Size(861, 486)
         tpDbTableSizes.TabIndex = 1
         tpDbTableSizes.Text = "Tables Sizes"
         tpDbTableSizes.UseVisualStyleBackColor = True
@@ -400,7 +415,7 @@ Partial Class FormMain
         dgvTableSizes.Dock = DockStyle.Fill
         dgvTableSizes.Location = New Point(3, 3)
         dgvTableSizes.Name = "dgvTableSizes"
-        dgvTableSizes.Size = New Size(779, 484)
+        dgvTableSizes.Size = New Size(855, 480)
         dgvTableSizes.TabIndex = 0
         ' 
         ' tpSizeByDay
@@ -409,7 +424,7 @@ Partial Class FormMain
         tpSizeByDay.Location = New Point(4, 24)
         tpSizeByDay.Name = "tpSizeByDay"
         tpSizeByDay.Padding = New Padding(3)
-        tpSizeByDay.Size = New Size(785, 490)
+        tpSizeByDay.Size = New Size(861, 486)
         tpSizeByDay.TabIndex = 0
         tpSizeByDay.Text = "Growth by Day"
         tpSizeByDay.UseVisualStyleBackColor = True
@@ -421,7 +436,7 @@ Partial Class FormMain
         dgvGrowthByDay.Dock = DockStyle.Fill
         dgvGrowthByDay.Location = New Point(3, 3)
         dgvGrowthByDay.Name = "dgvGrowthByDay"
-        dgvGrowthByDay.Size = New Size(779, 484)
+        dgvGrowthByDay.Size = New Size(855, 480)
         dgvGrowthByDay.TabIndex = 0
         ' 
         ' tpServices
@@ -430,7 +445,7 @@ Partial Class FormMain
         tpServices.Location = New Point(4, 24)
         tpServices.Name = "tpServices"
         tpServices.Padding = New Padding(3)
-        tpServices.Size = New Size(799, 524)
+        tpServices.Size = New Size(875, 520)
         tpServices.TabIndex = 4
         tpServices.Text = "Services"
         tpServices.UseVisualStyleBackColor = True
@@ -559,7 +574,7 @@ Partial Class FormMain
         tpOptions.Controls.Add(gbTechAssistOptions)
         tpOptions.Location = New Point(4, 24)
         tpOptions.Name = "tpOptions"
-        tpOptions.Size = New Size(799, 524)
+        tpOptions.Size = New Size(875, 520)
         tpOptions.TabIndex = 3
         tpOptions.Text = "Options"
         ' 
@@ -598,7 +613,7 @@ Partial Class FormMain
         tpNetworkDiagnostics.Location = New Point(4, 24)
         tpNetworkDiagnostics.Name = "tpNetworkDiagnostics"
         tpNetworkDiagnostics.Padding = New Padding(3)
-        tpNetworkDiagnostics.Size = New Size(799, 524)
+        tpNetworkDiagnostics.Size = New Size(875, 520)
         tpNetworkDiagnostics.TabIndex = 5
         tpNetworkDiagnostics.Text = "Network Diagnostics"
         tpNetworkDiagnostics.UseVisualStyleBackColor = True
@@ -613,7 +628,7 @@ Partial Class FormMain
         tcNetworkDiagnostics.Location = New Point(3, 3)
         tcNetworkDiagnostics.Name = "tcNetworkDiagnostics"
         tcNetworkDiagnostics.SelectedIndex = 0
-        tcNetworkDiagnostics.Size = New Size(793, 518)
+        tcNetworkDiagnostics.Size = New Size(869, 514)
         tcNetworkDiagnostics.TabIndex = 0
         ' 
         ' tpPing
@@ -627,7 +642,7 @@ Partial Class FormMain
         tpPing.Location = New Point(4, 24)
         tpPing.Name = "tpPing"
         tpPing.Padding = New Padding(3)
-        tpPing.Size = New Size(785, 490)
+        tpPing.Size = New Size(861, 486)
         tpPing.TabIndex = 0
         tpPing.Text = "Ping"
         tpPing.UseVisualStyleBackColor = True
@@ -704,7 +719,7 @@ Partial Class FormMain
         tpTcpPortTest.Location = New Point(4, 24)
         tpTcpPortTest.Name = "tpTcpPortTest"
         tpTcpPortTest.Padding = New Padding(3)
-        tpTcpPortTest.Size = New Size(785, 490)
+        tpTcpPortTest.Size = New Size(861, 486)
         tpTcpPortTest.TabIndex = 1
         tpTcpPortTest.Text = "Tcp"
         tpTcpPortTest.UseVisualStyleBackColor = True
@@ -836,7 +851,7 @@ Partial Class FormMain
         tpPortProcessMap.Location = New Point(4, 24)
         tpPortProcessMap.Name = "tpPortProcessMap"
         tpPortProcessMap.Padding = New Padding(3)
-        tpPortProcessMap.Size = New Size(785, 490)
+        tpPortProcessMap.Size = New Size(861, 486)
         tpPortProcessMap.TabIndex = 3
         tpPortProcessMap.Text = "Port To Process Mapping"
         tpPortProcessMap.UseVisualStyleBackColor = True
@@ -874,6 +889,202 @@ Partial Class FormMain
         chkCenterEdgePortsOnly.Text = "Show Known CenterEdge Ports Only"
         chkCenterEdgePortsOnly.UseVisualStyleBackColor = True
         ' 
+        ' tpHttpValidation
+        ' 
+        tpHttpValidation.Controls.Add(chkShowResponseHeaders)
+        tpHttpValidation.Controls.Add(rtbHttpResults)
+        tpHttpValidation.Controls.Add(btnHttpTest)
+        tpHttpValidation.Controls.Add(lblHttpUrl)
+        tpHttpValidation.Controls.Add(tbHttpUrl)
+        tpHttpValidation.Location = New Point(4, 24)
+        tpHttpValidation.Name = "tpHttpValidation"
+        tpHttpValidation.Padding = New Padding(3)
+        tpHttpValidation.Size = New Size(861, 486)
+        tpHttpValidation.TabIndex = 4
+        tpHttpValidation.Text = "HTTP / HTTPS Validation"
+        tpHttpValidation.UseVisualStyleBackColor = True
+        ' 
+        ' chkShowResponseHeaders
+        ' 
+        chkShowResponseHeaders.AutoSize = True
+        chkShowResponseHeaders.Checked = True
+        chkShowResponseHeaders.CheckState = CheckState.Checked
+        chkShowResponseHeaders.Location = New Point(387, 446)
+        chkShowResponseHeaders.Name = "chkShowResponseHeaders"
+        chkShowResponseHeaders.Size = New Size(154, 19)
+        chkShowResponseHeaders.TabIndex = 4
+        chkShowResponseHeaders.Text = "Show Response Headers"
+        chkShowResponseHeaders.UseVisualStyleBackColor = True
+        ' 
+        ' rtbHttpResults
+        ' 
+        rtbHttpResults.Location = New Point(35, 88)
+        rtbHttpResults.Name = "rtbHttpResults"
+        rtbHttpResults.ReadOnly = True
+        rtbHttpResults.Size = New Size(530, 281)
+        rtbHttpResults.TabIndex = 3
+        rtbHttpResults.Text = ""
+        rtbHttpResults.WordWrap = False
+        ' 
+        ' btnHttpTest
+        ' 
+        btnHttpTest.Location = New Point(527, 42)
+        btnHttpTest.Name = "btnHttpTest"
+        btnHttpTest.Size = New Size(75, 23)
+        btnHttpTest.TabIndex = 2
+        btnHttpTest.Text = "Test URL"
+        btnHttpTest.UseVisualStyleBackColor = True
+        ' 
+        ' lblHttpUrl
+        ' 
+        lblHttpUrl.AutoSize = True
+        lblHttpUrl.Location = New Point(6, 28)
+        lblHttpUrl.Name = "lblHttpUrl"
+        lblHttpUrl.Size = New Size(31, 15)
+        lblHttpUrl.TabIndex = 1
+        lblHttpUrl.Text = "URL:"
+        ' 
+        ' tbHttpUrl
+        ' 
+        tbHttpUrl.Location = New Point(43, 25)
+        tbHttpUrl.Name = "tbHttpUrl"
+        tbHttpUrl.Size = New Size(362, 23)
+        tbHttpUrl.TabIndex = 0
+        tbHttpUrl.Text = "relay-us-east-1.centeredgeonline.com"
+        ' 
+        ' tpUpgradeCheck
+        ' 
+        tpUpgradeCheck.Controls.Add(tlpUpgradeCheck)
+        tpUpgradeCheck.Location = New Point(4, 24)
+        tpUpgradeCheck.Name = "tpUpgradeCheck"
+        tpUpgradeCheck.Padding = New Padding(3)
+        tpUpgradeCheck.Size = New Size(875, 520)
+        tpUpgradeCheck.TabIndex = 6
+        tpUpgradeCheck.Text = "Upgrade Check"
+        tpUpgradeCheck.UseVisualStyleBackColor = True
+        ' 
+        ' tlpUpgradeCheck
+        ' 
+        tlpUpgradeCheck.ColumnCount = 2
+        tlpUpgradeCheck.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 19.4666672F))
+        tlpUpgradeCheck.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 80.53333F))
+        tlpUpgradeCheck.Controls.Add(lblLocation, 0, 0)
+        tlpUpgradeCheck.Controls.Add(tbRiskLevel, 1, 4)
+        tlpUpgradeCheck.Controls.Add(tbLocation, 1, 0)
+        tlpUpgradeCheck.Controls.Add(tbDatabaseSize, 1, 3)
+        tlpUpgradeCheck.Controls.Add(lblRiskLevel, 0, 4)
+        tlpUpgradeCheck.Controls.Add(tbOsVersion, 1, 2)
+        tlpUpgradeCheck.Controls.Add(lblSqlVersion, 0, 1)
+        tlpUpgradeCheck.Controls.Add(tbSqlVersion, 1, 1)
+        tlpUpgradeCheck.Controls.Add(lblOsVersion, 0, 2)
+        tlpUpgradeCheck.Controls.Add(lblDatabaseSize, 0, 3)
+        tlpUpgradeCheck.Location = New Point(22, 186)
+        tlpUpgradeCheck.Name = "tlpUpgradeCheck"
+        tlpUpgradeCheck.RowCount = 6
+        tlpUpgradeCheck.RowStyles.Add(New RowStyle(SizeType.Absolute, 30F))
+        tlpUpgradeCheck.RowStyles.Add(New RowStyle(SizeType.Absolute, 30F))
+        tlpUpgradeCheck.RowStyles.Add(New RowStyle(SizeType.Absolute, 30F))
+        tlpUpgradeCheck.RowStyles.Add(New RowStyle(SizeType.Absolute, 30F))
+        tlpUpgradeCheck.RowStyles.Add(New RowStyle(SizeType.Absolute, 30F))
+        tlpUpgradeCheck.RowStyles.Add(New RowStyle())
+        tlpUpgradeCheck.Size = New Size(750, 164)
+        tlpUpgradeCheck.TabIndex = 10
+        ' 
+        ' lblLocation
+        ' 
+        lblLocation.AutoSize = True
+        lblLocation.Dock = DockStyle.Fill
+        lblLocation.Location = New Point(3, 0)
+        lblLocation.Name = "lblLocation"
+        lblLocation.Size = New Size(140, 30)
+        lblLocation.TabIndex = 0
+        lblLocation.Text = "Location:  "
+        lblLocation.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' tbRiskLevel
+        ' 
+        tbRiskLevel.Dock = DockStyle.Fill
+        tbRiskLevel.Location = New Point(149, 123)
+        tbRiskLevel.Name = "tbRiskLevel"
+        tbRiskLevel.Size = New Size(598, 23)
+        tbRiskLevel.TabIndex = 9
+        ' 
+        ' tbLocation
+        ' 
+        tbLocation.Dock = DockStyle.Fill
+        tbLocation.Location = New Point(149, 3)
+        tbLocation.Name = "tbLocation"
+        tbLocation.Size = New Size(598, 23)
+        tbLocation.TabIndex = 1
+        ' 
+        ' tbDatabaseSize
+        ' 
+        tbDatabaseSize.Dock = DockStyle.Fill
+        tbDatabaseSize.Location = New Point(149, 93)
+        tbDatabaseSize.Name = "tbDatabaseSize"
+        tbDatabaseSize.Size = New Size(598, 23)
+        tbDatabaseSize.TabIndex = 7
+        ' 
+        ' lblRiskLevel
+        ' 
+        lblRiskLevel.AutoSize = True
+        lblRiskLevel.Dock = DockStyle.Fill
+        lblRiskLevel.Location = New Point(3, 120)
+        lblRiskLevel.Name = "lblRiskLevel"
+        lblRiskLevel.Size = New Size(140, 30)
+        lblRiskLevel.TabIndex = 8
+        lblRiskLevel.Text = "Risk:  "
+        lblRiskLevel.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' tbOsVersion
+        ' 
+        tbOsVersion.Dock = DockStyle.Fill
+        tbOsVersion.Location = New Point(149, 63)
+        tbOsVersion.Name = "tbOsVersion"
+        tbOsVersion.Size = New Size(598, 23)
+        tbOsVersion.TabIndex = 5
+        ' 
+        ' lblSqlVersion
+        ' 
+        lblSqlVersion.AutoSize = True
+        lblSqlVersion.Dock = DockStyle.Fill
+        lblSqlVersion.Location = New Point(3, 30)
+        lblSqlVersion.Name = "lblSqlVersion"
+        lblSqlVersion.Size = New Size(140, 30)
+        lblSqlVersion.TabIndex = 2
+        lblSqlVersion.Text = "SQL Version:  "
+        lblSqlVersion.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' tbSqlVersion
+        ' 
+        tbSqlVersion.Dock = DockStyle.Fill
+        tbSqlVersion.Location = New Point(149, 33)
+        tbSqlVersion.Name = "tbSqlVersion"
+        tbSqlVersion.Size = New Size(598, 23)
+        tbSqlVersion.TabIndex = 3
+        ' 
+        ' lblOsVersion
+        ' 
+        lblOsVersion.AutoSize = True
+        lblOsVersion.Dock = DockStyle.Fill
+        lblOsVersion.Location = New Point(3, 60)
+        lblOsVersion.Name = "lblOsVersion"
+        lblOsVersion.Size = New Size(140, 30)
+        lblOsVersion.TabIndex = 4
+        lblOsVersion.Text = "Windows Version: "
+        lblOsVersion.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' lblDatabaseSize
+        ' 
+        lblDatabaseSize.AutoSize = True
+        lblDatabaseSize.Dock = DockStyle.Fill
+        lblDatabaseSize.Location = New Point(3, 90)
+        lblDatabaseSize.Name = "lblDatabaseSize"
+        lblDatabaseSize.Size = New Size(140, 30)
+        lblDatabaseSize.TabIndex = 6
+        lblDatabaseSize.Text = "Database Size:  "
+        lblDatabaseSize.TextAlign = ContentAlignment.MiddleLeft
+        ' 
         ' tlpFormMain
         ' 
         tlpFormMain.ColumnCount = 3
@@ -889,9 +1100,9 @@ Partial Class FormMain
         tlpFormMain.Location = New Point(0, 0)
         tlpFormMain.Name = "tlpFormMain"
         tlpFormMain.RowCount = 2
-        tlpFormMain.RowStyles.Add(New RowStyle(SizeType.Percent, 84.42822F))
-        tlpFormMain.RowStyles.Add(New RowStyle(SizeType.Percent, 15.5717764F))
-        tlpFormMain.Size = New Size(1230, 661)
+        tlpFormMain.RowStyles.Add(New RowStyle(SizeType.Percent, 83.81241F))
+        tlpFormMain.RowStyles.Add(New RowStyle(SizeType.Percent, 16.1875954F))
+        tlpFormMain.Size = New Size(1329, 661)
         tlpFormMain.TabIndex = 7
         ' 
         ' flpFormButtonsBottom
@@ -899,9 +1110,9 @@ Partial Class FormMain
         flpFormButtonsBottom.Controls.Add(btnCancel)
         flpFormButtonsBottom.Controls.Add(btnAdminUnlock)
         flpFormButtonsBottom.Dock = DockStyle.Bottom
-        flpFormButtonsBottom.Location = New Point(816, 561)
+        flpFormButtonsBottom.Location = New Point(892, 561)
         flpFormButtonsBottom.Name = "flpFormButtonsBottom"
-        flpFormButtonsBottom.Size = New Size(250, 97)
+        flpFormButtonsBottom.Size = New Size(273, 97)
         flpFormButtonsBottom.TabIndex = 8
         ' 
         ' btnAdminUnlock
@@ -922,9 +1133,10 @@ Partial Class FormMain
         flpTest.Controls.Add(tbTest1)
         flpTest.Controls.Add(flpAdvButtons)
         flpTest.Controls.Add(flpUtilityButtons)
-        flpTest.Location = New Point(3, 561)
+        flpTest.Dock = DockStyle.Fill
+        flpTest.Location = New Point(3, 557)
         flpTest.Name = "flpTest"
-        flpTest.Size = New Size(807, 97)
+        flpTest.Size = New Size(883, 101)
         flpTest.TabIndex = 9
         ' 
         ' btnTest2
@@ -974,7 +1186,7 @@ Partial Class FormMain
         flpAdvButtons.Controls.Add(btnAdvReportEditor)
         flpAdvButtons.Location = New Point(3, 32)
         flpAdvButtons.Name = "flpAdvButtons"
-        flpAdvButtons.Size = New Size(436, 56)
+        flpAdvButtons.Size = New Size(359, 56)
         flpAdvButtons.TabIndex = 16
         ' 
         ' btnAdvManager
@@ -1042,7 +1254,7 @@ Partial Class FormMain
         flpUtilityButtons.Controls.Add(btnEventViewer)
         flpUtilityButtons.Controls.Add(btnAppWiz)
         flpUtilityButtons.Controls.Add(btnDevices)
-        flpUtilityButtons.Location = New Point(445, 32)
+        flpUtilityButtons.Location = New Point(368, 32)
         flpUtilityButtons.Name = "flpUtilityButtons"
         flpUtilityButtons.Size = New Size(351, 56)
         flpUtilityButtons.TabIndex = 15
@@ -1098,7 +1310,7 @@ Partial Class FormMain
         ' scFormMainTopRight
         ' 
         scFormMainTopRight.Dock = DockStyle.Fill
-        scFormMainTopRight.Location = New Point(816, 3)
+        scFormMainTopRight.Location = New Point(892, 3)
         scFormMainTopRight.Name = "scFormMainTopRight"
         scFormMainTopRight.Orientation = Orientation.Horizontal
         ' 
@@ -1109,8 +1321,8 @@ Partial Class FormMain
         ' scFormMainTopRight.Panel2
         ' 
         scFormMainTopRight.Panel2.Controls.Add(rtbHints)
-        scFormMainTopRight.Size = New Size(250, 552)
-        scFormMainTopRight.SplitterDistance = 337
+        scFormMainTopRight.Size = New Size(273, 548)
+        scFormMainTopRight.SplitterDistance = 334
         scFormMainTopRight.TabIndex = 10
         ' 
         ' flpFormButtonsTop
@@ -1121,7 +1333,7 @@ Partial Class FormMain
         flpFormButtonsTop.Dock = DockStyle.Fill
         flpFormButtonsTop.Location = New Point(0, 0)
         flpFormButtonsTop.Name = "flpFormButtonsTop"
-        flpFormButtonsTop.Size = New Size(250, 337)
+        flpFormButtonsTop.Size = New Size(273, 334)
         flpFormButtonsTop.TabIndex = 7
         ' 
         ' rtbHints
@@ -1134,14 +1346,14 @@ Partial Class FormMain
         rtbHints.Name = "rtbHints"
         rtbHints.ReadOnly = True
         rtbHints.ScrollBars = RichTextBoxScrollBars.Vertical
-        rtbHints.Size = New Size(250, 211)
+        rtbHints.Size = New Size(273, 210)
         rtbHints.TabIndex = 0
         rtbHints.Text = ""
         ' 
         ' flpAppButtons
         ' 
         flpAppButtons.Dock = DockStyle.Fill
-        flpAppButtons.Location = New Point(1072, 3)
+        flpAppButtons.Location = New Point(1171, 3)
         flpAppButtons.Name = "flpAppButtons"
         tlpFormMain.SetRowSpan(flpAppButtons, 2)
         flpAppButtons.Size = New Size(155, 655)
@@ -1163,74 +1375,11 @@ Partial Class FormMain
         ' 
         tmrServices.Interval = 1000
         ' 
-        ' tpHttpValidation
-        ' 
-        tpHttpValidation.Controls.Add(chkShowResponseHeaders)
-        tpHttpValidation.Controls.Add(rtbHttpResults)
-        tpHttpValidation.Controls.Add(btnHttpTest)
-        tpHttpValidation.Controls.Add(lblHttpUrl)
-        tpHttpValidation.Controls.Add(tbHttpUrl)
-        tpHttpValidation.Location = New Point(4, 24)
-        tpHttpValidation.Name = "tpHttpValidation"
-        tpHttpValidation.Padding = New Padding(3)
-        tpHttpValidation.Size = New Size(785, 490)
-        tpHttpValidation.TabIndex = 4
-        tpHttpValidation.Text = "HTTP / HTTPS Validation"
-        tpHttpValidation.UseVisualStyleBackColor = True
-        ' 
-        ' tbHttpUrl
-        ' 
-        tbHttpUrl.Location = New Point(43, 25)
-        tbHttpUrl.Name = "tbHttpUrl"
-        tbHttpUrl.Size = New Size(362, 23)
-        tbHttpUrl.TabIndex = 0
-        tbHttpUrl.Text = "relay-us-east-1.centeredgeonline.com"
-        ' 
-        ' lblHttpUrl
-        ' 
-        lblHttpUrl.AutoSize = True
-        lblHttpUrl.Location = New Point(6, 28)
-        lblHttpUrl.Name = "lblHttpUrl"
-        lblHttpUrl.Size = New Size(31, 15)
-        lblHttpUrl.TabIndex = 1
-        lblHttpUrl.Text = "URL:"
-        ' 
-        ' btnHttpTest
-        ' 
-        btnHttpTest.Location = New Point(527, 42)
-        btnHttpTest.Name = "btnHttpTest"
-        btnHttpTest.Size = New Size(75, 23)
-        btnHttpTest.TabIndex = 2
-        btnHttpTest.Text = "Test URL"
-        btnHttpTest.UseVisualStyleBackColor = True
-        ' 
-        ' rtbHttpResults
-        ' 
-        rtbHttpResults.Location = New Point(35, 88)
-        rtbHttpResults.Name = "rtbHttpResults"
-        rtbHttpResults.ReadOnly = True
-        rtbHttpResults.Size = New Size(530, 281)
-        rtbHttpResults.TabIndex = 3
-        rtbHttpResults.Text = ""
-        rtbHttpResults.WordWrap = False
-        ' 
-        ' chkShowResponseHeaders
-        ' 
-        chkShowResponseHeaders.AutoSize = True
-        chkShowResponseHeaders.Checked = True
-        chkShowResponseHeaders.CheckState = CheckState.Checked
-        chkShowResponseHeaders.Location = New Point(387, 446)
-        chkShowResponseHeaders.Name = "chkShowResponseHeaders"
-        chkShowResponseHeaders.Size = New Size(154, 19)
-        chkShowResponseHeaders.TabIndex = 4
-        chkShowResponseHeaders.Text = "Show Response Headers"
-        chkShowResponseHeaders.UseVisualStyleBackColor = True
-        ' 
         ' FormMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1230, 661)
+        ClientSize = New Size(1329, 661)
         Controls.Add(tlpFormMain)
         ForeColor = SystemColors.ControlText
         Name = "FormMain"
@@ -1274,6 +1423,11 @@ Partial Class FormMain
         tpPortProcessMap.ResumeLayout(False)
         tpPortProcessMap.PerformLayout()
         CType(dgvPortProcesses, ComponentModel.ISupportInitialize).EndInit()
+        tpHttpValidation.ResumeLayout(False)
+        tpHttpValidation.PerformLayout()
+        tpUpgradeCheck.ResumeLayout(False)
+        tlpUpgradeCheck.ResumeLayout(False)
+        tlpUpgradeCheck.PerformLayout()
         tlpFormMain.ResumeLayout(False)
         flpFormButtonsBottom.ResumeLayout(False)
         flpTest.ResumeLayout(False)
@@ -1285,8 +1439,6 @@ Partial Class FormMain
         CType(scFormMainTopRight, ComponentModel.ISupportInitialize).EndInit()
         scFormMainTopRight.ResumeLayout(False)
         flpFormButtonsTop.ResumeLayout(False)
-        tpHttpValidation.ResumeLayout(False)
-        tpHttpValidation.PerformLayout()
         ResumeLayout(False)
     End Sub
 
@@ -1390,5 +1542,17 @@ Partial Class FormMain
     Friend WithEvents tbHttpUrl As TextBox
     Friend WithEvents chkShowResponseHeaders As CheckBox
     Friend WithEvents rtbHttpResults As RichTextBox
+    Friend WithEvents tpUpgradeCheck As TabPage
+    Friend WithEvents tbLocation As TextBox
+    Friend WithEvents lblLocation As Label
+    Friend WithEvents tbSqlVersion As TextBox
+    Friend WithEvents lblSqlVersion As Label
+    Friend WithEvents tbOsVersion As TextBox
+    Friend WithEvents lblOsVersion As Label
+    Friend WithEvents tbDatabaseSize As TextBox
+    Friend WithEvents lblDatabaseSize As Label
+    Friend WithEvents lblRiskLevel As Label
+    Friend WithEvents tbRiskLevel As TextBox
+    Friend WithEvents tlpUpgradeCheck As TableLayoutPanel
 
 End Class
