@@ -36,15 +36,15 @@ Public Class CloudAppSettings
     ''' Fetches the latest remote configuration JSON over HTTPS.
     ''' </summary>
     Public Shared Async Function FetchLatestAsync() As Task(Of CloudAppSettings)
-        ' Append a timestamp query string to bypass GitHub CDN caching
-        Dim rawSettingsUrl As String = $"https://raw.githubusercontent.com/vphelps/TechAssistant/feature/Network-Diagnostics/TechAssistant/Data/settings.json?t={DateTime.UtcNow.Ticks}"
+        ' Points to root settings.json on master with cache-busting timestamp
+        Dim rawSettingsUrl As String = $"https://raw.githubusercontent.com/vphelps/TechAssistant/master/settings.json?t={DateTime.UtcNow.Ticks}"
 
         Try
             Using client As New HttpClient()
                 client.Timeout = TimeSpan.FromSeconds(5)
                 client.DefaultRequestHeaders.Add("User-Agent", "TechAssistantApp")
 
-                ' Disable local HTTP request caching
+                ' Bypass local client caching
                 client.DefaultRequestHeaders.CacheControl = New Headers.CacheControlHeaderValue With {
                 .NoCache = True,
                 .NoStore = True
@@ -59,6 +59,7 @@ Public Class CloudAppSettings
                 Return JsonSerializer.Deserialize(Of CloudAppSettings)(json, options)
             End Using
         Catch ex As Exception
+            ' Returns local defaults if network/fetching fails
             Return New CloudAppSettings()
         End Try
     End Function
