@@ -4,7 +4,7 @@ Partial Public Class FormMain
 
     Private ReadOnly _hints As New Dictionary(Of String, String)
 
-    Private Sub InitializeHints()
+    Private Sub InitializeHints(Optional settings As CloudAppSettings = Nothing)
 
         _hints(tpSystemInfo.Name) =
         AddGridTips(
@@ -50,7 +50,47 @@ Partial Public Class FormMain
             "• Use buttons to Start, Stop, or Restart the services." & Environment.NewLine &
             Environment.NewLine &
             "• Only available when running as an administrator."
+        _hints(tpNetworkDiagnostics.Name) =
+                "Network Diagnostics" &
+                Environment.NewLine &
+                Environment.NewLine &
+                "• Verify basic network connectivity using Ping." &
+                Environment.NewLine &
+                "• Verify services are accepting connections using TCP Port Test." &
+                Environment.NewLine &
+                Environment.NewLine &
+                "Common CenterEdge Ports:" &
+                Environment.NewLine &
+                "• SQL Server: 1433" &
+                Environment.NewLine &
+                "• License Validation: 15050" &
+                Environment.NewLine &
+                "• Advantage API: 15059" &
+                Environment.NewLine &
+                "• Credit Cards: 31420"
+        _hints(tpPortProcessMap.Name) =
+         AddGridTips(
+            "Port Processes" &
+            Environment.NewLine &
+            Environment.NewLine &
+            "• Displays information about processes using specific ports." &
+            Environment.NewLine &
+            "• Useful for identifying which applications are using certain ports.")
 
+        ' Extract thresholds safely with fallbacks (4 and 10)
+        Dim warnStr As String = If(settings IsNot Nothing, settings.DbSizeWarningThresholdGB, 4D).ToString("0.##")
+        Dim critStr As String = If(settings IsNot Nothing, settings.DbSizeCriticalThresholdGB, 10D).ToString("0.##")
+
+        _hints(tpUpgradeCheck.Name) =
+            "Upgrade Health Check" &
+            Environment.NewLine &
+            Environment.NewLine &
+            "Phase 1 Health Check Risk Assessment:" & Environment.NewLine &
+            Environment.NewLine &
+            Environment.NewLine &
+            $"• Low Risk (< {warnStr} GB): Ready for scheduling." & Environment.NewLine & Environment.NewLine &
+            $"• Requires Review ({warnStr}–{critStr} GB): Escalate to Advanced Support Tech." & Environment.NewLine & Environment.NewLine &
+            $"• High Risk (> {critStr} GB): Approaching or exceeds SQL Express {critStr} GB data limit; escalate to Dev."
     End Sub
     Private Function AddGridTips(
         text As String) As String

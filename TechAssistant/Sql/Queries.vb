@@ -38,6 +38,20 @@
                 t.Name, s.Name, p.Rows
             ORDER BY 
                 TotalSpaceKB DESC"
+    Public Const GetLargestDbTableSize As String =
+       " SELECT TOP 1 
+    SUM(a.total_pages) * 8 AS LargestTableSizeKB
+FROM sys.tables t
+INNER JOIN sys.indexes i 
+    ON t.object_id = i.object_id
+INNER JOIN sys.partitions p 
+    ON i.object_id = p.object_id AND i.index_id = p.index_id
+INNER JOIN sys.allocation_units a 
+    ON p.partition_id = a.container_id
+WHERE t.is_ms_shipped = 0 -- Exclude system tables
+GROUP BY t.object_id, t.name
+ORDER BY SUM(a.total_pages) DESC;"
+
     Public Const GetDbGrowthByDay As String =
         "--Grouped by day:
 DECLARE @dbname NVARCHAR(1024), @days INT;      

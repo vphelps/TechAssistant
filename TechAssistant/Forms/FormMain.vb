@@ -1,6 +1,9 @@
 ﻿Imports System.ComponentModel
 Imports System.DirectoryServices.ActiveDirectory
+Imports System.Net.NetworkInformation
+Imports System.Net.Sockets
 Imports Microsoft.Data.SqlClient
+Imports System.Management
 
 Public Class FormMain
     Private _savedServiceSelections As New List(Of String)
@@ -8,6 +11,8 @@ Public Class FormMain
     Private _currentServiceOperation As String = String.Empty
     Private _currentServiceIndex As Integer
     Private _totalServiceOperations As Integer
+    Private _upgradeModel As UpgradeCheckModel = Nothing
+    Private _cloudSettings As CloudAppSettings
 
     Private Sub UpdateHelpText()
 
@@ -29,8 +34,16 @@ Public Class FormMain
         End If
 
     End Sub
-    Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub RemoveFutureFeatures()
+
+    End Sub
+
+    Private Async Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim strTemp As String = Nothing
+        ' 1. Fetch cloud configuration at startup (not saved to disk)
+        _cloudSettings = Await CloudAppSettings.FetchLatestAsync()
+
+
         ApplicationState.RunningAsAdmin = SecurityHelper.IsRunningElevated()
 
         GridContextMenuHelper.Attach(dgvSystemInfo)
@@ -39,17 +52,31 @@ Public Class FormMain
         GridContextMenuHelper.Attach(dgvWebOptions)
         GridContextMenuHelper.Attach(dgvTableSizes)
         GridContextMenuHelper.Attach(dgvGrowthByDay)
+        GridContextMenuHelper.Attach(dgvPortProcesses)
 
         InitializeIcons()
-        InitializeHints()
+        InitializeHints(_cloudSettings)
         InitializeUtilityButtons()
         UpdateHelpText()
+        LoadPortDefinitions()
 
         ApplicationState.Options = OptionsManager.Load()
         InitialLoad()
 
         LoadServices()
+        tcFormMain.SelectedTab = tpUpgradeCheck
+        Dim currentUser As String = Environment.UserName
+        If Not String.Equals(currentUser, "vphelps") Then
+            tcFormMain.TabPages.Remove(tpDbInfo)
+            tcFormMain.TabPages.Remove(tpServices)
+            tcFormMain.TabPages.Remove(tpDbAnalytics)
+            tcFormMain.TabPages.Remove(tpOptions)
+            flpTest.Visible = False
+            flpFormButtonsTop.Visible = False
+            flpAppButtons.Visible = False
+            btnAdminUnlock.Visible = False
 
+        End If
     End Sub
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
@@ -205,14 +232,64 @@ Public Class FormMain
 
     End Sub
 
+    Private Sub LoadUpgradeCheckData()
+        ' Fetch only if not already loaded (prevents unnecessary re-querying)
+        If _upgradeModel Is Nothing Then
+            _upgradeModel = UpgradeCheckModel.LoadFromSystem()
+        End If
+
+        ' Bind the cached model data to the UI
+        DisplayUpgradeCheckInfo(_upgradeModel)
+    End Sub
+
+    ''' <summary>
+    ''' Updates UI elements on tpUpgradeCheck using the model data and cloud settings.
+    ''' </summary>
+    Private Sub DisplayUpgradeCheckInfo(model As UpgradeCheckModel)
+        ' 1. Basic Info
+        tbLocation.Text = model.LocationName
+        tbSqlVersion.Text = model.SqlVersion
+        tbOsVersion.Text = model.FullOsDisplay
+
+        ' 2. Safely handle DatabaseSizeGB
+        If model.DatabaseSizeGB.HasValue Then
+            tbDatabaseSize.Text = $"{model.DatabaseSizeGB.Value:N2} GB"
+        Else
+            tbDatabaseSize.Text = "Unknown"
+        End If
+
+        ' 3. Dynamic Risk Level Info driven by Cloud Settings
+        ' (_cloudSettings is the form-level instance loaded during FormMain_Load)
+        tbRiskLevel.Text = model.GetRiskDescription(_cloudSettings)
+        tbRiskLevel.ForeColor = model.GetRiskForeColor(_cloudSettings)
+        tbRiskLevel.BackColor = model.GetRiskBackColor(_cloudSettings)
+
+        ' Optional: Also apply the risk background color directly to the DB size field for visual emphasis
+        tbDatabaseSize.BackColor = model.GetRiskBackColor(_cloudSettings)
+
+        ' 4. Safe Table & Combined Size Calculations
+        If model.LargestTableSizeKB.HasValue AndAlso model.DatabaseSizeGB.HasValue Then
+            ' Extract values safely using .Value
+            Dim tableSizeKB As Decimal = model.LargestTableSizeKB.Value
+            Dim tableSizeGB As Decimal = tableSizeKB / 1048576D
+            Dim dbSizeGB As Decimal = model.DatabaseSizeGB.Value
+
+            Dim sizeAdded As Decimal = tableSizeGB + dbSizeGB
+            Dim sizeRounded As Decimal = Math.Round(sizeAdded, 2)
+
+            tbTest1.Text = $"DB size({dbSizeGB:N2} GB) plus largest table({tableSizeGB:N2} GB) added = {sizeRounded:N2} GB"
+        Else
+            ' Fallback text when either value fails to load from SQL
+            tbTest1.Text = "Unable to calculate total size (Database or Table size missing)."
+        End If
+    End Sub
+
     Private Sub btnTest1_Click(sender As Object, e As EventArgs) Handles btnTest1.Click
-        MessageHelper.ShowInfo(
-    "Database connection successful.")
+
     End Sub
 
     Private Sub btnTest2_Click(sender As Object, e As EventArgs) Handles btnTest2.Click
-        MessageHelper.ShowWarning(
-    "This operation may take several minutes.")
+
     End Sub
 
     Private Sub btnTest3_Click(sender As Object, e As EventArgs) Handles btnTest3.Click
@@ -243,16 +320,13 @@ Public Class FormMain
         UpdateHelpText()
 
         If tcFormMain.SelectedTab Is tpServices Then
-
             tmrServices.Start()
-
         Else
-
             tmrServices.Stop()
-
         End If
+        If tcFormMain.SelectedTab Is tpUpgradeCheck Then LoadUpgradeCheckData()
 
-        tbTest1.Text = tmrServices.Enabled.ToString
+
 
     End Sub
 
@@ -268,7 +342,6 @@ Public Class FormMain
         If Not System.IO.File.Exists(executable) Then
             Return
         End If
-        tbTest1.Text = executable
 
         Dim startinfo As ProcessStartInfo = New ProcessStartInfo(executable)
         startinfo.Arguments = ""
@@ -403,5 +476,291 @@ Public Class FormMain
         Await PerformServiceOperation(services, AddressOf ServiceHelper.StopService, "Stop")
 
     End Sub
+
+    Private Async Sub btnPing_Click(
+    sender As Object,
+    e As EventArgs) Handles btnPing.Click
+
+        Dim host As String =
+        tbPingHost.Text.Trim()
+
+        rtbPingResults.Clear()
+
+        If String.IsNullOrWhiteSpace(host) Then
+
+            rtbPingResults.Text =
+            "Host is required."
+
+            Exit Sub
+
+        End If
+
+        Try
+
+            Dim totalTime As Long = 0
+            Dim successCount As Integer = 0
+
+            For i As Integer = 1 To CInt(nudPingCount.Value)
+
+                Dim reply =
+                Await PingHostAsync(host)
+
+                If reply.Status =
+                IPStatus.Success Then
+
+                    successCount += 1
+                    totalTime += reply.RoundtripTime
+
+                    rtbPingResults.AppendText(
+                    $"Reply {i}: {reply.Address}" &
+                    Environment.NewLine)
+
+                    rtbPingResults.AppendText(
+                    $"Time: {reply.RoundtripTime} ms" &
+                    Environment.NewLine)
+
+                Else
+
+                    rtbPingResults.AppendText(
+                    $"Reply {i}: {reply.Status}" &
+                    Environment.NewLine)
+
+                End If
+
+                rtbPingResults.AppendText(
+                Environment.NewLine)
+
+            Next
+
+            If successCount > 0 Then
+
+                rtbPingResults.AppendText(
+                $"Average: {totalTime / successCount} ms")
+
+            End If
+
+        Catch ex As Exception
+
+            rtbPingResults.Text =
+            ex.Message
+
+        End Try
+
+    End Sub
+    Private Async Sub btnTcpTest_Click(
+    sender As Object,
+    e As EventArgs) Handles btnTcpTest.Click
+
+        Dim host As String =
+            tbTcpHost.Text.Trim()
+
+        Dim port As Integer =
+            CInt(nudTcpPort.Value)
+
+        rtbTcpResults.Clear()
+
+        Try
+
+            Dim stopwatch As New Stopwatch()
+
+            Using client As New TcpClient()
+
+                stopwatch.Start()
+
+                Await client.ConnectAsync(
+                    host,
+                    port)
+
+                stopwatch.Stop()
+
+                rtbTcpResults.AppendText(
+                    "Connection Successful" &
+                    Environment.NewLine &
+                    Environment.NewLine)
+
+                rtbTcpResults.AppendText(
+                    $"Host: {host}" &
+                    Environment.NewLine)
+
+                rtbTcpResults.AppendText(
+                    $"Port: {port}" &
+                    Environment.NewLine)
+
+                rtbTcpResults.AppendText(
+                    $"Connection Time: {stopwatch.ElapsedMilliseconds} ms")
+
+            End Using
+
+        Catch ex As SocketException
+
+            rtbTcpResults.Text =
+                "Connection Failed" &
+                Environment.NewLine &
+                Environment.NewLine &
+                ex.Message
+
+        Catch ex As Exception
+
+            rtbTcpResults.Text =
+                ex.Message
+
+        End Try
+
+    End Sub
+    Private Sub cboPortPresets_SelectedIndexChanged(
+    sender As Object,
+    e As EventArgs) Handles cbPortPresets.SelectedIndexChanged
+
+        Select Case cbPortPresets.Text
+
+            Case "SQL Server (1433)"
+                nudTcpPort.Value = 1433
+
+            Case "Advantage API Service (15059)"
+                nudTcpPort.Value = 15059
+
+            Case "Credit Cards (31420)"
+                nudTcpPort.Value = 31420
+
+        End Select
+
+    End Sub
+
+    Private Async Sub btnValidateCenterEdgePorts_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnValidateCenterEdgePorts.Click
+
+        Dim host As String =
+        tbTcpHost.Text.Trim()
+
+        btnValidateCenterEdgePorts.Enabled = False
+
+        Try
+
+            Dim portsToTest =
+    GetSelectedPorts()
+
+            If portsToTest.Count = 0 Then
+                MessageHelper.ShowInfo(
+        "Select at least one port.")
+
+                Exit Sub
+
+            End If
+            Dim tasks =
+    portsToTest.Select(
+        Function(port)
+
+            Return TestPortAsync(
+                host,
+                port)
+
+        End Function)
+
+            Dim results =
+    Await Task.WhenAll(tasks)
+
+            BindPortResults(
+            results)
+            Dim openCount =
+    results.Count(
+        Function(r) r.IsOpen)
+
+            Dim closedCount =
+                results.Count(
+                    Function(r) Not r.IsOpen)
+
+            lblPortsOpen.Text =
+                $"Open: {openCount}"
+
+            lblPortsClosed.Text =
+                $"Closed: {closedCount}"
+        Finally
+
+            btnValidateCenterEdgePorts.Enabled = True
+
+        End Try
+
+    End Sub
+
+    Private Sub btnPortsSelectAll_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnPortsSelectAll.Click
+
+        For i As Integer = 0 To clbPorts.Items.Count - 1
+
+            clbPorts.SetItemChecked(
+                i,
+                True)
+
+        Next
+
+    End Sub
+    Private Sub btnPortsClearAll_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnPortsClearAll.Click
+
+        For i As Integer = 0 To clbPorts.Items.Count - 1
+
+            clbPorts.SetItemChecked(
+                i,
+                False)
+
+        Next
+
+    End Sub
+    Private Sub btnPortsCore_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnPortsCore.Click
+
+        btnPortsClearAll_Click(
+        Nothing,
+        EventArgs.Empty)
+
+        CheckPort(1433)
+        CheckPort(15050)
+        CheckPort(15051)
+        CheckPort(15059)
+
+    End Sub
+
+
+    Private Sub tpPortProcessMap_Enter(
+    sender As Object,
+    e As EventArgs) _
+    Handles tpPortProcessMap.Enter
+
+        LoadPortProcesses()
+
+    End Sub
+    Private Sub btnPortProcessRefresh_Click(
+    sender As Object,
+    e As EventArgs) Handles btnRefreshPortProcesses.Click
+
+        LoadPortProcesses()
+
+    End Sub
+    Private Sub chkCenterEdgePortsOnly_CheckedChanged(
+    sender As Object,
+    e As EventArgs) _
+    Handles chkCenterEdgePortsOnly.CheckedChanged
+
+        LoadPortProcesses()
+
+    End Sub
+
+    Private Async Sub btnHttpTest_Click(
+    sender As Object,
+    e As EventArgs) _
+    Handles btnHttpTest.Click
+
+        Await TestHttpUrl()
+
+    End Sub
+
 
 End Class

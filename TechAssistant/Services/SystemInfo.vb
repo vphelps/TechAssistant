@@ -328,4 +328,20 @@ Public NotInheritable Class SystemInfo
         End Try
 
     End Function
+    Public Shared Function GetWindowsFriendlyName() As String
+        Try
+            Dim searcher As New ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem")
+            For Each os As ManagementObject In searcher.Get()
+                If os("Caption") IsNot Nothing Then
+                    Return os("Caption").ToString().Trim()
+                End If
+            Next
+        Catch ex As Exception
+            ' Fallback to built-in Environment version
+            Return Environment.OSVersion.ToString()
+        End Try
+
+        Return Environment.OSVersion.ToString()
+    End Function
+
 End Class
