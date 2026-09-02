@@ -1,9 +1,11 @@
 ﻿Imports System.ComponentModel
 Imports System.DirectoryServices.ActiveDirectory
+Imports System.IO
+Imports System.Management
 Imports System.Net.NetworkInformation
 Imports System.Net.Sockets
 Imports Microsoft.Data.SqlClient
-Imports System.Management
+Imports System.Threading.Tasks
 
 Public Class FormMain
     Private _savedServiceSelections As New List(Of String)
@@ -794,6 +796,66 @@ Public Class FormMain
             ' Restore button state and cursor
             btnUpgradeCheck.Enabled = True
             Me.Cursor = Cursors.Default
+        End Try
+    End Sub
+
+    Private Sub btnExportText_Click(sender As Object, e As EventArgs) Handles btnExportText.Click
+        ' Ensure model data is available
+        If _upgradeModel Is Nothing Then
+            MessageBox.Show("No upgrade check data available to export.", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        ' Configure SaveFileDialog
+        Using saveFileDialog As New SaveFileDialog
+            ' Generate a clean, default filename with location and date
+            Dim sanitizedLocation = String.Join("_", _upgradeModel.LocationName.Split(Path.GetInvalidFileNameChars))
+            saveFileDialog.FileName = $"UpgradeCheck_{sanitizedLocation}_{Date.Now:yyyyMMdd}.txt"
+            saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*"
+            saveFileDialog.Title = "Export Upgrade Check Data"
+
+            If saveFileDialog.ShowDialog = DialogResult.OK Then
+                Try
+                    ' Generate content and write file
+                    Dim reportContent = _upgradeModel.ToTextReport(_cloudSettings)
+                    File.WriteAllText(saveFileDialog.FileName, reportContent)
+
+                    MessageBox.Show("Upgrade check report exported successfully!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show($"Failed to export report: {ex.Message}", "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+        End Using
+    End Sub
+
+    Private Async Sub btnCopyToClipboard_Click(sender As Object, e As EventArgs) Handles btnCopyToClipboard.Click
+        ' 1. Guard check for model data
+        If _upgradeModel Is Nothing Then
+            MessageBox.Show("No upgrade check data available to copy.", "Copy Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        Try
+            ' 2. Generate report text and copy to Windows Clipboard
+            Dim reportText As String = _upgradeModel.ToClipboardString(_cloudSettings)
+            Clipboard.SetText(reportText)
+
+            ' 3. Provide temporary visual feedback on the button
+            Dim btn As Button = DirectCast(sender, Button)
+            Dim originalText As String = btn.Text
+
+            btn.Text = "Copied!"
+            btn.Enabled = False ' Prevents rapid double-clicking during delay
+
+            ' Wait for 2000 milliseconds (2 seconds) asynchronously
+            Await Task.Delay(2000)
+
+            ' Restore original state
+            btn.Text = originalText
+            btn.Enabled = True
+
+        Catch ex As Exception
+            MessageBox.Show($"Failed to copy to clipboard: {ex.Message}", "Copy Failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 End Class

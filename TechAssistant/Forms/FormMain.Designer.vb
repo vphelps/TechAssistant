@@ -94,6 +94,8 @@ Partial Class FormMain
         lblHttpUrl = New Label()
         tbHttpUrl = New TextBox()
         tpUpgradeCheck = New TabPage()
+        btnCopyToClipboard = New Button()
+        btnExportText = New Button()
         TextBox1 = New TextBox()
         btnUpgradeCheck = New Button()
         tlpUpgradeCheck = New TableLayoutPanel()
@@ -956,6 +958,8 @@ Partial Class FormMain
         ' 
         ' tpUpgradeCheck
         ' 
+        tpUpgradeCheck.Controls.Add(btnCopyToClipboard)
+        tpUpgradeCheck.Controls.Add(btnExportText)
         tpUpgradeCheck.Controls.Add(TextBox1)
         tpUpgradeCheck.Controls.Add(btnUpgradeCheck)
         tpUpgradeCheck.Controls.Add(tlpUpgradeCheck)
@@ -967,6 +971,24 @@ Partial Class FormMain
         tpUpgradeCheck.Text = "Upgrade Check"
         tpUpgradeCheck.UseVisualStyleBackColor = True
         ' 
+        ' btnCopyToClipboard
+        ' 
+        btnCopyToClipboard.Location = New Point(215, 412)
+        btnCopyToClipboard.Name = "btnCopyToClipboard"
+        btnCopyToClipboard.Size = New Size(123, 23)
+        btnCopyToClipboard.TabIndex = 13
+        btnCopyToClipboard.Text = "Copy to Clipboard"
+        btnCopyToClipboard.UseVisualStyleBackColor = True
+        ' 
+        ' btnExportText
+        ' 
+        btnExportText.Location = New Point(215, 370)
+        btnExportText.Name = "btnExportText"
+        btnExportText.Size = New Size(75, 23)
+        btnExportText.TabIndex = 13
+        btnExportText.Text = "Export"
+        btnExportText.UseVisualStyleBackColor = True
+        ' 
         ' TextBox1
         ' 
         TextBox1.Location = New Point(148, 222)
@@ -977,7 +999,7 @@ Partial Class FormMain
         ' 
         ' btnUpgradeCheck
         ' 
-        btnUpgradeCheck.Location = New Point(636, 452)
+        btnUpgradeCheck.Location = New Point(215, 331)
         btnUpgradeCheck.Name = "btnUpgradeCheck"
         btnUpgradeCheck.Size = New Size(102, 23)
         btnUpgradeCheck.TabIndex = 11
@@ -1578,5 +1600,7 @@ Partial Class FormMain
     Friend WithEvents tlpUpgradeCheck As TableLayoutPanel
     Friend WithEvents btnUpgradeCheck As Button
     Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents btnExportText As Button
+    Friend WithEvents btnCopyToClipboard As Button
 
 End Class

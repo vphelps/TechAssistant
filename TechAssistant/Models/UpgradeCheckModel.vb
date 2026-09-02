@@ -154,4 +154,60 @@ Public Class UpgradeCheckModel
 
         Return model
     End Function
+    ''' <summary>
+    ''' Formats the model data into a structured text report.
+    ''' </summary>
+    Public Function ToTextReport(settings As CloudAppSettings) As String
+        Dim sb As New System.Text.StringBuilder()
+
+        sb.AppendLine("==================================================")
+        sb.AppendLine("           UPGRADE CHECK REPORT                   ")
+        sb.AppendLine($"Generated: {DateTime.Now:yyyy-MM-dd HH:mm:ss}")
+        sb.AppendLine("==================================================")
+        sb.AppendLine()
+        sb.AppendLine($"Location Name:  {LocationName}")
+        sb.AppendLine($"OS Version:     {FullOsDisplay}")
+        sb.AppendLine($"SQL Version:    {SqlVersion}")
+        sb.AppendLine()
+        sb.AppendLine("--------------------------------------------------")
+        sb.AppendLine("DATABASE & RISK SUMMARY")
+        sb.AppendLine("--------------------------------------------------")
+
+        If DatabaseSizeGB.HasValue Then
+            sb.AppendLine($"Database Size:  {DatabaseSizeGB.Value:N2} GB")
+        Else
+            sb.AppendLine("Database Size:  Unknown")
+        End If
+
+        sb.AppendLine($"Risk Assessment: {GetRiskDescription(settings)}")
+        sb.AppendLine()
+
+        sb.AppendLine("--------------------------------------------------")
+        sb.AppendLine("SIZE CALCULATIONS")
+        sb.AppendLine("--------------------------------------------------")
+
+        If LargestTableSizeKB.HasValue AndAlso DatabaseSizeGB.HasValue Then
+            Dim tableSizeGB As Decimal = LargestTableSizeKB.Value / 1048576D
+            Dim dbSizeGB As Decimal = DatabaseSizeGB.Value
+            Dim sizeRounded As Decimal = Math.Round(tableSizeGB + dbSizeGB, 2)
+
+            sb.AppendLine($"Largest Table:  {tableSizeGB:N2} GB ({LargestTableSizeKB.Value:N0} KB)")
+            sb.AppendLine($"Total Combined: DB size ({dbSizeGB:N2} GB) + largest table ({tableSizeGB:N2} GB) = {sizeRounded:N2} GB")
+        Else
+            sb.AppendLine("Unable to calculate total size (Database or Table size missing).")
+        End If
+
+        sb.AppendLine()
+        sb.AppendLine("==================================================")
+
+        Return sb.ToString()
+    End Function
+    ''' <summary>
+    ''' Formats the model data into a clean, concise string suitable for pasting into chats, emails, or tickets.
+    ''' </summary>
+    Public Function ToClipboardString(settings As CloudAppSettings) As String
+        ' Reuses the same formatted string generated for text export
+        Return ToTextReport(settings)
+    End Function
+
 End Class
