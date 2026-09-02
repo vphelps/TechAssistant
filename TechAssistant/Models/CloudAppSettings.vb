@@ -5,14 +5,17 @@ Imports System.Text.Json
 Public Class CloudAppSettings
     Public Property DbSizeWarningThresholdGB As Decimal = 4D
     Public Property DbSizeCriticalThresholdGB As Decimal = 10D
-
+    ' ******** Background colors for risk levels (hex) ********
     Public Property ColorLowRiskHex As String = "#90EE90"
     Public Property ColorWarningRiskHex As String = "#FFFACD"
     Public Property ColorCriticalRiskHex As String = "#FFB6C1"
 
+    '******* Text colors for risk levels (hex) ********
     Public Property TextLowRiskHex As String = "#006400"
     Public Property TextWarningRiskHex As String = "#B8860B"
     Public Property TextCriticalRiskHex As String = "#8B0000"
+
+    '******* Background and text colors for status messages (hex) ********
     Public Property StatusNormalBackColorHex As String = "#FFFFFF"
     Public Property StatusWarningBackColorHex As String = "#FFFFFF"
     Public Property StatusErrorBackColorHex As String = "#FFFFFF"
