@@ -38,7 +38,7 @@ Public Class FormMain
 
     End Sub
 
-    Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim strTemp As String = Nothing
 
         ApplicationState.RunningAsAdmin = SecurityHelper.IsRunningElevated()
@@ -63,17 +63,25 @@ Public Class FormMain
         LoadServices()
         tcFormMain.SelectedTab = tpUpgradeCheck
         Dim currentUser As String = Environment.UserName
-        If Not String.Equals(currentUser, "vphelps") Then
-            tcFormMain.TabPages.Remove(tpDbInfo)
-            tcFormMain.TabPages.Remove(tpServices)
-            tcFormMain.TabPages.Remove(tpDbAnalytics)
-            tcFormMain.TabPages.Remove(tpOptions)
-            flpTest.Visible = False
-            flpFormButtonsTop.Visible = False
-            flpAppButtons.Visible = False
-            btnAdminUnlock.Visible = False
+        'If Not String.Equals(currentUser, "vphelps") Then
+        '    tcFormMain.TabPages.Remove(tpDbInfo)
+        '    tcFormMain.TabPages.Remove(tpServices)
+        '    tcFormMain.TabPages.Remove(tpDbAnalytics)
+        '    tcFormMain.TabPages.Remove(tpOptions)
+        '    flpTest.Visible = False
+        '    flpFormButtonsTop.Visible = False
+        '    flpAppButtons.Visible = False
+        '    btnAdminUnlock.Visible = False
 
-        End If
+        'End If
+        tbPingHost.Text = SystemInfo.GetDatabaseServer
+        tbTcpHost.Text = SystemInfo.GetDatabaseServer
+        tbTest1.Text = $"This computer:  {Environment.MachineName} | Server:  {SystemInfo.GetDatabaseServer} | Database: {SystemInfo.GetDatabaseName}"
+        _cloudSettings = Await CloudAppSettings.FetchLatestAsync()
+
+
+        TextBox1.BackColor = ColorTranslator.FromHtml(_cloudSettings.StatusErrorBackColorHex)
+        TextBox1.ForeColor = ColorTranslator.FromHtml(_cloudSettings.StatusErrorForeColorHex)
     End Sub
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 

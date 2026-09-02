@@ -1,10 +1,16 @@
 ﻿{
-  "DbSizeWarningThresholdGB": 0.3,
-  "DbSizeCriticalThresholdGB": 5.0,
-  "ColorLowRiskHex": "#90EE90",
-  "ColorWarningRiskHex": "#FFFACD",
-  "ColorCriticalRiskHex": "#FFB6C1",
-  "TextLowRiskHex": "#006400",
-  "TextWarningRiskHex": "#B8860B",
-  "TextCriticalRiskHex": "#8B0000"
+    "DbSizeWarningThresholdGB": 0.3,
+    "DbSizeCriticalThresholdGB": 5.0,
+    "ColorLowRiskHex": "#90EE90",
+    "ColorWarningRiskHex": "#FFFACD",
+    "ColorCriticalRiskHex": "#FFB6C1",
+    "TextLowRiskHex": "#006400",
+    "TextWarningRiskHex": "#B8860B",
+    "TextCriticalRiskHex": "#8B0000",
+    "StatusNormalBackColorHex": "#FFFFFF",
+    "StatusWarningBackColorHex": "#FFFACD",
+    "StatusErrorBackColorHex": "#FFB6C1",
+    "StatusNormalForeColorHex": "#000000",
+    "StatusWarningForeColorHex": "#000000",
+    "StatusErrorForeColorHex": "#FFFFFF"
 }

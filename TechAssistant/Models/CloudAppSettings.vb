@@ -13,6 +13,13 @@ Public Class CloudAppSettings
     Public Property TextLowRiskHex As String = "#006400"
     Public Property TextWarningRiskHex As String = "#B8860B"
     Public Property TextCriticalRiskHex As String = "#8B0000"
+    Public Property StatusNormalBackColorHex As String = "#FFFFFF"
+    Public Property StatusWarningBackColorHex As String = "#FFFFFF"
+    Public Property StatusErrorBackColorHex As String = "#FFFFFF"
+    Public Property StatusNormalForeColorHex As String = "#000000"
+    Public Property StatusWarningForeColorHex As String = "#000000"
+    Public Property StatusErrorForeColorHex As String = "#000000"
+
 
     Public ReadOnly Property LowRiskBackColor As Color
         Get
